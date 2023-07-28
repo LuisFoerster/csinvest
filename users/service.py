@@ -1,0 +1,15 @@
+import sqlalchemy
+from sqlalchemy.orm import Session
+
+from users.models import User, UserBase
+
+
+def get(*, db_session: Session, steamid: str) -> User:
+    stmt = sqlalchemy.select(User).where(User.steamid == steamid)
+    return db_session.execute(stmt).scalar()
+
+
+def create(*, db_session: Session, user_in: UserBase) -> None:
+    stmt = sqlalchemy.insert(User).values(**user_in)
+    result = db_session.execute(stmt)
+    db_session.commit()
