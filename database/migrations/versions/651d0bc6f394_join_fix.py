@@ -1,8 +1,8 @@
-"""users-columns-changed
+"""join fix
 
-Revision ID: 5b5c99ac3053
-Revises: 1359d38bd4df
-Create Date: 2023-07-28 15:58:21.837815
+Revision ID: 651d0bc6f394
+Revises: 2312d9eec53a
+Create Date: 2023-07-31 17:11:51.353643
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5b5c99ac3053'
-down_revision = '1359d38bd4df'
+revision = '651d0bc6f394'
+down_revision = '2312d9eec53a'
 branch_labels = None
 depends_on = None
 
