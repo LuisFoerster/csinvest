@@ -1,1 +1,3 @@
-import users.models # noqa
+import users.models# noqa
+import items.models
+import prices.models
