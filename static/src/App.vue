@@ -3,10 +3,12 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
+  <router-link to="/">Home</router-link> |
+  <router-link to="/about">About</router-link> |
+  <a href="/about">A tag About</a> <!-- bad refreshes the page--->
+
+  <router-view/>
   <div>
-    <h1 class="text-3xl font-bold underline">
-      Hello world!
-    </h1>
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
