@@ -1,16 +1,17 @@
-from steam.community_market_api.endpoints import get_some_items_from_steam
+from items.service import get
 from database.session import get_session
-from items.models import Item
-import items.service as items_service
-import prices.service as price_service
-from utils import flatten_dict
-from steam.community_market_api.preprocessing import preprocess_item
+from items.models import ItemBase
+from vendor_offers.models import VendorOfferBase
 
-items = get_some_items_from_steam(0, 100)
 session = get_session()
 
-# print(items)
-item_data = list(map(lambda x: preprocess_item(x), items["results"]))
-# print(item_data)
-items_service.create(db_session=session, item_in=item_data)
-price_service.create(db_session=session, price_in=item_data)
+result = get(db_session=session, market_hash_name="Souvenir Sawed-Off | Irradiated Alert (Minimal Wear)")
+
+
+vendor_offers = []
+vendor_offers_dict = result.VendorOffer.__dict__
+vendor_offers_dict = {**vendor_offers_dict, **vendor_offers_dict}
+vendor_offers = VendorOfferBase(**result.VendorOffer.__dict__)
+print(vendor_offers)
+item = ItemBase(**result.Item.__dict__, vendor_offers =  [vendor_offers,vendor_offers] )
+print(item.model_dump_json())

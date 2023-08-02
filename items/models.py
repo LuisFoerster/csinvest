@@ -1,7 +1,8 @@
 from sqlalchemy import Column, String, Text, text, Integer, DateTime, func, URL, ForeignKey
 from sqlalchemy.orm import relationship, class_mapper
 from database.base import Base
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
+from vendor_offers.models import VendorOfferBase
 
 """ sqlalchemy models """
 
@@ -15,10 +16,11 @@ class Item(Base):
     icon_url = Column(Text)
     background_color = Column(String(64))
     name_color = Column(String(64))
-    # updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
-    # created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
+    type = Column(Text)
+    updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+    created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
-    prices = relationship("Price", back_populates="item", cascade="all, delete-orphan")
+    vendor_offers = relationship("VendorOffer", back_populates="item", cascade="all, delete-orphan")
 
 
 """ pydantic models """
@@ -28,7 +30,9 @@ class ItemBase(BaseModel):
     market_hash_name: str
     classid: str
     name: str
-    sell_price: int
+    icon_url: str
 
-class ItemRead(ItemBase):
-    pass
+
+
+class ItemWithVendorOffers(ItemBase):
+    vendor_offers: list[VendorOfferBase] = []
