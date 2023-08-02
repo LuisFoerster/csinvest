@@ -11,13 +11,17 @@ def create(*, db_session: Session, item_in):
 
 
 def create_or_update(*, db_session: Session, data: dict):
+
     stmt = (
         mysql_sa.insert(VendorOffer)
-        .values(**data)
-        .on_duplicate_key_update(
-            **data,
-            updated_at=func.current_timestamp(),
-        )
+        .values(data)
     )
-    db_session.execute(stmt)
+
+    update_stmt = stmt.on_duplicate_key_update(
+        lowest_price = stmt.inserted.lowest_price,
+        median_price = stmt.inserted.median_price,
+        sell_listings = stmt.inserted.sell_listings,
+        updated_at = func.current_timestamp()
+    )
+    db_session.execute(update_stmt)
     db_session.commit()
