@@ -6,11 +6,12 @@ from vendor_offers.models import VendorOffer
 
 
 
-def create(*, db_session: Session, item_in) -> Item:
+def create(*, db_session: Session, item_in):
     db_session.bulk_insert_mappings(Item, item_in)
     db_session.commit()
 
-
+def create_and_upadte_if_existing():
+    pass
 def get_with_vendor_offers(*, db_session: Session, market_hash_name):
     stmt = (
         sa.select(Item, VendorOffer)
