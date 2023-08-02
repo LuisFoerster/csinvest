@@ -9,7 +9,7 @@ from pydantic import BaseModel
 class VendorOffer(Base):
     __tablename__ = "vendor_offers"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    classid = Column(ForeignKey("items.classid"))
+    classid = Column(ForeignKey("items.classid"), unique = True)
     vendorid = Column(ForeignKey("vendors.id"))
     affiliate_link = Column(Text)
     lowest_price = Column(Integer)

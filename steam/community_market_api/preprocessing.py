@@ -7,13 +7,15 @@ def preprocess_item(item_in: dict):
         "background_color": item_in["asset_description"]["background_color"],
         "name_color": item_in["asset_description"]["name_color"],
         "icon_url": item_in["asset_description"]["icon_url"],
-        "lowest_price": item_in["sell_price"],
-        "median_price": item_in["sell_price"],
-        "sell_listings": item_in["sell_listings"],
         "type": item_in["asset_description"]["type"],
-        "vendorid": 1
     }
 
 
-def preprocess_prices(item_in: dict):
-    pass
+def preprocess_offer(item_in: dict):
+    return {
+        "classid": item_in["asset_description"]["classid"],
+        "lowest_price": item_in["sell_price"],
+        "median_price": item_in["sell_price"],
+        "sell_listings": item_in["sell_listings"],
+        "vendorid": 1
+    }

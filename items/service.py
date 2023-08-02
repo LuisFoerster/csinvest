@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.dialects.mysql as mysql_sa
 from sqlalchemy.orm import Session, joinedload
-
+from sqlalchemy import func
 from items.models import Item
 
 
@@ -13,8 +13,9 @@ def create(*, db_session: Session, item_in):
 def create_or_skip(*, db_session: Session, data: dict):
     stmt = (
         mysql_sa.insert(Item)
-        .values(**data)
-        .on_duplicate_key_update()
+        .values(data)
+        .on_duplicate_key_update(updated_at= func.current_timestamp()
+                                 )
     )
     db_session.execute(stmt)
     db_session.commit()
