@@ -1,9 +1,5 @@
 from typing import List
-
 import requests
-
-from settings import settings
-
 
 def get_some_items_from_steam(start, count):
     url = 'https://steamcommunity.com/market/search/render/'

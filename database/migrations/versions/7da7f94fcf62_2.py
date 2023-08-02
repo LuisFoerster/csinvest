@@ -1,8 +1,8 @@
-"""join fix2
+"""2
 
-Revision ID: d78e3c5008f8
-Revises: 651d0bc6f394
-Create Date: 2023-07-31 17:23:19.957234
+Revision ID: 7da7f94fcf62
+Revises: f2543a369cfa
+Create Date: 2023-08-02 12:31:31.028265
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd78e3c5008f8'
-down_revision = '651d0bc6f394'
+revision = '7da7f94fcf62'
+down_revision = 'f2543a369cfa'
 branch_labels = None
 depends_on = None
 

@@ -2,8 +2,7 @@ import sqlalchemy as sa
 from sqlalchemy.orm import Session, joinedload
 
 from items.models import Item, ItemBase
-from vendor_offers.models import VendorOffer
-
+from prices.models import Price
 
 
 def create(*, db_session: Session, item_in) -> Item:
@@ -11,11 +10,11 @@ def create(*, db_session: Session, item_in) -> Item:
     db_session.commit()
 
 
-def get_with_vendor_offers(*, db_session: Session, market_hash_name):
+def get(*, db_session: Session, market_hash_name):
     stmt = (
-        sa.select(Item, VendorOffer)
-        .join(VendorOffer)
+        sa.select(Item, Price)
+        .join(Price)
         .where(Item.market_hash_name == market_hash_name)
     )
     result = db_session.execute(stmt).fetchone()
-    return result#{**result.Item.__dict__, **result.VendorOffer.__dict__}
+    return {**result.Item.__dict__, **result.Price.__dict__}

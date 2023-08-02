@@ -7,5 +7,9 @@ def preprocess_item(item_in: dict):
         "background_color": item_in["asset_description"]["background_color"],
         "name_color": item_in["asset_description"]["name_color"],
         "icon_url": item_in["asset_description"]["icon_url"],
-        "sell_price": item_in["sell_price"],
+        "lowest_price": item_in["sell_price"],
+        "median_price": item_in["sell_price"],
+        "sell_listings": item_in["sell_listings"],
+        "type": item_in["asset_description"]["type"],
+        "vendorid": 1
     }
