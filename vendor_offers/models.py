@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship, class_mapper
 from database.base import Base
 from pydantic import BaseModel
 
-
 """ sqlalchemy models """
 
 
@@ -23,17 +22,16 @@ class VendorOffer(Base):
     vendor = relationship("Vendor", back_populates="vendor_offers")
 
 
-
 """ pydantic models """
 
 
 class VendorOfferBase(BaseModel):
     vendorid: int
-    #affiliate_link: str
+    # affiliate_link: str
     lowest_price: int
     median_price: int
     sell_listings: int
 
+
 class VendorOfferRead(VendorOfferBase):
     pass
-

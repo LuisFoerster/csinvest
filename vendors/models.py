@@ -1,5 +1,5 @@
-from sqlalchemy import Column, String, Text, text,Float, Integer, DateTime, func, URL, ForeignKey
-from sqlalchemy.orm import relationship, class_mapper
+from sqlalchemy import Column, Text, text,Float, Integer, DateTime, func, URL, ForeignKey
+from sqlalchemy.orm import relationship
 from database.base import Base
 from pydantic import BaseModel
 

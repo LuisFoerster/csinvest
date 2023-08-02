@@ -33,6 +33,5 @@ class ItemBase(BaseModel):
     icon_url: str
 
 
-
 class ItemWithVendorOffers(ItemBase):
     vendor_offers: list[VendorOfferBase] = []
