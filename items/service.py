@@ -1,4 +1,5 @@
 import sqlalchemy as sa
+import sqlalchemy.dialects.mysql as mysql_sa
 from sqlalchemy.orm import Session, joinedload
 
 from items.models import Item
@@ -6,6 +7,16 @@ from items.models import Item
 
 def create(*, db_session: Session, item_in):
     db_session.bulk_insert_mappings(Item, item_in)
+    db_session.commit()
+
+
+def create_or_skip(*, db_session: Session, data: dict):
+    stmt = (
+        mysql_sa.insert(Item)
+        .values(**data)
+        .on_duplicate_key_update()
+    )
+    db_session.execute(stmt)
     db_session.commit()
 
 

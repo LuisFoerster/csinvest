@@ -13,3 +13,7 @@ def preprocess_item(item_in: dict):
         "type": item_in["asset_description"]["type"],
         "vendorid": 1
     }
+
+
+def preprocess_prices(item_in: dict):
+    pass
