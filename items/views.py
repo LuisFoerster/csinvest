@@ -1,11 +1,9 @@
-from typing import List
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+import items.service as items_service
 from database.session import get_session
 from items.models import ItemWithVendorOffers
-import items.service as items_service
 
 router = APIRouter()
 

@@ -1,5 +1,5 @@
-from typing import List
 import requests
+
 
 def get_some_items(start, count):
     url = 'https://steamcommunity.com/market/search/render/'
@@ -19,12 +19,13 @@ def get_some_items(start, count):
         print(f"Error occurred while parsing JSON response: {e}")
         return None
 
+
 def get_inventory(steamid):
     url = f"https://steamcommunity.com/inventory/{steamid}/730/2"
     headers = {"Accept-Language": "de-DE", "Accept": "application/json, text/javascript, */*; q=0.01"}
 
     try:
-        response = requests.get(url,  headers=headers)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:

@@ -1,8 +1,6 @@
-from sqlalchemy import Column, String, Text,Float,Boolean, text, Integer, DateTime, func, URL, ForeignKey
-from sqlalchemy.orm import relationship, class_mapper
+from sqlalchemy import Column, Float, Boolean, text, Integer, DateTime, func, ForeignKey
+
 from database.base import Base
-from pydantic import BaseModel, validator
-from vendor_offers.models import VendorOfferBase
 
 """ sqlalchemy models """
 
@@ -19,8 +17,4 @@ class AssetStack(Base):
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
 
-
-
 """ pydantic models """
-
-

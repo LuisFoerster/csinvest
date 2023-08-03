@@ -1,7 +1,8 @@
-from sqlalchemy import Column, String, Text, text, Integer, DateTime, func, URL, ForeignKey
-from sqlalchemy.orm import relationship, class_mapper
+from pydantic import BaseModel
+from sqlalchemy import Column, String, Text, text, Integer, DateTime, func
+from sqlalchemy.orm import relationship
+
 from database.base import Base
-from pydantic import BaseModel, validator
 from vendor_offers.models import VendorOfferBase
 
 """ sqlalchemy models """
@@ -21,7 +22,6 @@ class Item(Base):
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     vendor_offers = relationship("VendorOffer", back_populates="item", cascade="all, delete-orphan")
-
 
 
 """ pydantic models """

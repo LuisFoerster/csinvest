@@ -1,7 +1,7 @@
 import users.models # noqa
-import items.models
-import  vendors.models
-import vendor_offers.models
-import accounts.models
-import assets.models
-import asset_stacks.models
+import items.models # noqa
+import vendors.models # noqa
+import vendor_offers.models # noqa
+import accounts.models # noqa
+import assets.models # noqa
+import asset_stacks.models # noqa

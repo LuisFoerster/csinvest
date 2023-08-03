@@ -1,5 +1,6 @@
 import requests
 
+
 def get_all_items_from_skinport():
     url = 'https://api.skinport.com/v1/items'
     params = {"app_id": 730, "currency": "EUR", "tradable": 0}

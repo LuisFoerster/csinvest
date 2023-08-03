@@ -11,5 +11,5 @@ def get(*, db_session: Session, steamid: str) -> User:
 
 def create(*, db_session: Session, user_in: UserBase) -> None:
     stmt = sqlalchemy.insert(User).values(**user_in)
-    result = db_session.execute(stmt)
+    db_session.execute(stmt)
     db_session.commit()

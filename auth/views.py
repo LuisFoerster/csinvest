@@ -1,12 +1,6 @@
-from fastapi import APIRouter, Request, HTTPException, Depends
-from fastapi.responses import RedirectResponse
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 
-from auth.jwt import create_access_token
-from database.session import get_session
-from vendor_processing.steam.openid import STEAM_OPENID_URL, STEAM_OPENID_AUTH_PARAMS, is_valid
-#from vendor_processing.steam import get_player_summaries
-import users.service as user_service
+# from vendor_processing.steam import get_player_summaries
 #
 router = APIRouter()
 #

@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
+
 import requests
-from starlette.responses import RedirectResponse
 
 from settings import settings
 

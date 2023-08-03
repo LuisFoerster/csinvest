@@ -1,6 +1,6 @@
 import sqlalchemy as sa
-import sqlalchemy.dialects.mysql as mysql_sa
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
+
 from accounts.models import Account
 
 
