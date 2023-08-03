@@ -23,6 +23,7 @@ class Item(Base):
     vendor_offers = relationship("VendorOffer", back_populates="item", cascade="all, delete-orphan")
 
 
+
 """ pydantic models """
 
 
