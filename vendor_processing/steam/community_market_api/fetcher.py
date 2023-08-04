@@ -1,5 +1,6 @@
 import time
 
+import requests
 from sqlalchemy.orm import Session
 
 import assets.service as assets_service
