@@ -10,13 +10,14 @@ class AssetStack(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     classid = Column(ForeignKey("items.classid"))
     steamid = Column(ForeignKey("accounts.steamid"))
-    average_buyin = Column(Float)
-    size = Column(Integer)
+    buyin = Column(Float)
+    virtual = Column(Boolean)
+    virtual_size = Column(Integer)
     updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     item = relationship("Item", back_populates="asset_stacks")
     account = relationship("Account", back_populates="asset_stacks")
-    buyin_stacks = relationship("BuyinStack", back_populates="asset_stack", cascade="all, delete-orphan")
+    assets = relationship("Asset", back_populates="asset_stack")
 
 """ pydantic models """

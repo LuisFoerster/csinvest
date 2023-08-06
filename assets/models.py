@@ -10,6 +10,7 @@ class Asset(Base):
     assetid = Column(String(64), primary_key=True)
     classid = Column(ForeignKey("items.classid"))
     steamid = Column(ForeignKey("accounts.steamid"))
+    asset_stackid = Column(ForeignKey("assetstacks.id"))
     instanceid = Column(String(64))
     appid = Column(Integer)
     contextid = Column(String(64))
@@ -19,6 +20,7 @@ class Asset(Base):
 
     item = relationship("Item", back_populates="assets")
     account = relationship("Account", back_populates="assets")
-    buyin_stacks = relationship("BuyinStack", back_populates="asset", cascade="all, delete-orphan")
+    asset_stack = relationship("AssetStack", back_populates="assets")
+
 
 """ pydantic models """

@@ -87,4 +87,4 @@ def get_item_nameid(market_hash_name: str):
         return None
 
 
-print(get_item_orders_histogram(get_item_nameid("Revolution Case")))
+#print(get_item_orders_histogram(get_item_nameid("Revolution Case")))

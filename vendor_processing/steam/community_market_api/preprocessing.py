@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 import items.service as items_service
 import asset_stacks.service as asset_stacks_service
-import  buyin_stacks.service as buyin_stacks_service
+import assets.service as assets_service
 from database.session import get_session
 from vendor_processing.steam.community_market_api.endpoints import get_item_nameid
 def preprocess_item(item_in: dict):
@@ -80,73 +80,35 @@ def item_from_describtions(classid: str, describtions: dict):
     }
 
 
-def generate_asset_groups(steamid, assets_in: dict):
-    asset_groups = []
-    for asset in assets_in:
-        index = next((index for index, asset_group in enumerate(
-            asset_groups) if asset_group["classid"] == asset["classid"]), None)
-        if index is not None:
-            asset_groups[index]["size"] += 1
+def buyin_table(marketable_assets_in: list[dict]):
+    buyin_prices = {}
+    for asset in marketable_assets_in:
+        if not asset["classid"] in buyin_prices:
+            #TODO: get buyin
+            buyin_prices[asset["classid"]] = 2.0
+    return buyin_prices
+
+def assign_to_stack(db_session: Session, buyin_table: dict, marketable_assets_in: list[dict]):
+    for asset in marketable_assets_in:
+        asset_stack = asset_stacks_service.get_id_by_classid_and_buyin(db_session=db_session,
+            steamid=asset["steamid"], classid=asset["classid"], buyin= buyin_table[asset["classid"]])
+        if asset_stack is not None:
+            asset["asset_stackid"] = asset_stack.id
         else:
-            asset_groups.append({
-                # this is a asset_group
-                    "steamid": steamid,
-                    "assetid": asset,
-                    "classid": asset["classid"],
-                    "buyin": None,
-                    "size": 1,
-                    "virtual": 0
-                })
-
-    return asset_groups
-
-
-def preprocess_asset_stacks(db_session: Session, steamid, assets_in: dict):
-    asset_stacks = []
-    buyin_stacks = []
-    asset_gorups = generate_asset_groups(steamid,assets_in)
-    for asset_group in asset_gorups:
-        asset_stack = asset_stacks_service.get(db_session=db_session, steamid=steamid, classid=asset_group["classid"])
-        if asset_stack:
-            if asset_group["size"] > asset_stack.size:
-                size_diff = asset_group["size"] - asset_stack.size
-                asset_stack.append(
-                    {
-                        "classid": asset_group["classid"],
-                        "steamid": steamid,
-                        "average_buyin": None,
-                        "size": size_diff,
-                        "virtual": 0
-                    })
-                buyin_stacks.append(
-                {
-                    "assetid": steamid,
-                    "asset_stackid": None,
-                    "buyin": None, # TODO: Insert current price of Item
-                    "size": size_diff,
-                    "virtual": 0
-                })
-        else:
-            asset_stack.append(
-                {
-                    "classid": asset_group["classid"],
-                    "steamid": steamid,
-                    "average_buyin": None,
-                    "size": asset_group["size"],
-                    "virtual": 0
-                })
-            buyin_stacks.append(
-                {
-                    "assetid": steamid,
-                    "asset_stackid": None,
-                    "buyin": None,
-                    "size": asset_group["size"],
-                    "virtual": 0
-                })
+            asset_stack_id= asset_stacks_service.create(db_session=db_session,asset_stack_in={
+                "classid": asset["classid"],
+                "steamid": asset["steamid"],
+                "buyin": buyin_table[asset["classid"]],
+                "virtual": 0,
+                "virtual_size":None
+            })
+            asset["asset_stackid"] = asset_stack_id
+    return marketable_assets_in
 
 
 
-    return asset_stacks, buyin_stacks
+
+
 
 
 #stacks = preprocess_asset_stacks(get_session(),76561198086314296, {})

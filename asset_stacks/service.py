@@ -8,9 +8,13 @@ def create(*, db_session: Session, asset_stack_in):
     stmt = (
         sa.insert(AssetStack).
         values(asset_stack_in)
+        .returning(AssetStack.id)
     )
-    db_session.execute(stmt)
+    result = db_session.execute(stmt)
     db_session.commit()
+    return result.scalar()
+
+
 
 def create_or_update(*, db_session: Session, asset_stack_in):
     stmt = (
@@ -41,3 +45,14 @@ def get(*, db_session: Session, steamid: str, classid:str):
     )
     result = db_session.execute(stmt).scalar()
     return result
+
+def get_id_by_classid_and_buyin(*, db_session: Session, steamid:str, classid:str, buyin:float):
+    stmt = (
+        sa.select(AssetStack)
+        .where(AssetStack.steamid == steamid)
+        .where(AssetStack.classid == classid)
+        .where(AssetStack.buyin == buyin)
+    )
+    result = db_session.execute(stmt).scalar()
+    return result
+
