@@ -13,7 +13,7 @@ def create(*, db_session: Session, assets_in):
     db_session.commit()
 
 
-def create_or_update(*, db_session: Session, assets_in, ):
+def create_or_update(*, db_session: Session, assets_in):
     stmt = (
         mysql_sa.insert(Asset)
         .values(assets_in)
@@ -27,7 +27,7 @@ def create_or_update(*, db_session: Session, assets_in, ):
     db_session.commit()
 
 
-def get_newest_update_timestamp(*, db_session: Session, steamid: str):
+def get_timestamp_of_last_update(*, db_session: Session, steamid: str):
     stmt = (
         sa.select(Asset)
         .where(Asset.steamid == steamid)

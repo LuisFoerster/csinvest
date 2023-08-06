@@ -9,7 +9,7 @@ def get(*, db_session: Session, steamid: str) -> User:
     return db_session.execute(stmt).scalar()
 
 
-def create(*, db_session: Session, user_in: UserBase) -> None:
+def create(*, db_session: Session, user_in: dict) -> None:
     stmt = sqlalchemy.insert(User).values(**user_in)
     db_session.execute(stmt)
     db_session.commit()

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from asset_stacks.models import AssetStack
 
 
-def create(*, db_session: Session, asset_stack_in):
+def create(*, db_session: Session, asset_stack_in: dict):
     stmt = (
         sa.insert(AssetStack).
         values(asset_stack_in)
@@ -13,7 +13,6 @@ def create(*, db_session: Session, asset_stack_in):
     result = db_session.execute(stmt)
     db_session.commit()
     return result.scalar()
-
 
 
 def create_or_update(*, db_session: Session, asset_stack_in):
@@ -29,6 +28,7 @@ def create_or_update(*, db_session: Session, asset_stack_in):
     db_session.execute(update_stmt)
     db_session.commit()
 
+
 def get_all(*, db_session: Session, steamid: str):
     stmt = (
         sa.select(AssetStack)
@@ -37,7 +37,8 @@ def get_all(*, db_session: Session, steamid: str):
     result = db_session.execute(stmt).scalars().all()
     return result
 
-def get(*, db_session: Session, steamid: str, classid:str):
+
+def get(*, db_session: Session, steamid: str, classid: str):
     stmt = (
         sa.select(AssetStack)
         .where(AssetStack.steamid == steamid)
@@ -46,7 +47,8 @@ def get(*, db_session: Session, steamid: str, classid:str):
     result = db_session.execute(stmt).scalar()
     return result
 
-def get_id_by_classid_and_buyin(*, db_session: Session, steamid:str, classid:str, buyin:float):
+
+def get_id(*, db_session: Session, steamid: str, classid: str, buyin: float):
     stmt = (
         sa.select(AssetStack)
         .where(AssetStack.steamid == steamid)
@@ -54,5 +56,22 @@ def get_id_by_classid_and_buyin(*, db_session: Session, steamid:str, classid:str
         .where(AssetStack.buyin == buyin)
     )
     result = db_session.execute(stmt).scalar()
+
+    if result is not None:
+        return result.id
+
     return result
 
+
+def create_if_not_exist(*, db_session: Session, asset_stack_in: dict):
+    stackid = get_id(
+        db_session=db_session,
+        steamid=asset_stack_in["steamid"],
+        classid=asset_stack_in["classid"],
+        buyin=asset_stack_in["buyin"]
+    )
+
+    if not stackid:
+        stackid = create(db_session=db_session, asset_stack_in=asset_stack_in)
+
+    return stackid

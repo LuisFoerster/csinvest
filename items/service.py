@@ -52,3 +52,10 @@ def get_classid_by_market_hash_name(*, db_session: Session, market_hash_name: st
     result = db_session.execute(stmt).scalar()
     return result
 
+
+def create_if_not_exist(*, db_session: Session, item_in: dict):
+    if not exists(db_session=db_session, classid=item_in["classid"]):
+        create(
+            db_session=db_session,
+            item_in=item_in
+        )

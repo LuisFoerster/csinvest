@@ -5,6 +5,8 @@ import asset_stacks.service as asset_stacks_service
 import assets.service as assets_service
 from database.session import get_session
 from vendor_processing.steam.community_market_api.endpoints import get_item_nameid
+
+
 def preprocess_item(item_in: dict):
     item_nameid = get_item_nameid(item_in["asset_description"]["market_hash_name"])
     return {
@@ -42,75 +44,61 @@ def cent_to_euro(amount_cent):
         return None
 
 
-
-def preprocess_asset(db_session: Session, steamid:str ,asset_in: dict, describtions: dict, logging_data = dict):
-    """describtions dict must be in format {%classid%: {...},...}"""
-    marktable = describtions[asset_in["classid"]]["marketable"]
-
-    if marktable:
-        logging_data["marktable_items"] += 1
-        if not items_service.exists(db_session=db_session, classid=asset_in["classid"]):
-            logging_data["items_added_to_db"] += 1
-            items_service.create(
-                db_session=db_session,
-                item_in=item_from_describtions(classid=asset_in["classid"], describtions=describtions)
-            )
-        return {
-            "steamid": steamid,
-            "appid": asset_in["appid"],
-            "contextid": asset_in["contextid"],
-            "assetid": asset_in["assetid"],
-            "classid": asset_in["classid"],
-            "instanceid": asset_in["instanceid"],
-            "amount": asset_in["amount"]
-            }
-    return
-
-
-def item_from_describtions(classid: str, describtions: dict):
-    """describtions dict must be in format {%classid%: {...},...}"""
-    return {
-        "classid": describtions[classid]["classid"],
-        "appid": describtions[classid]["appid"],
-        "market_hash_name": describtions[classid]["market_hash_name"],
-        "name": describtions[classid]["name"],
-        "background_color": describtions[classid]["background_color"],
-        "name_color": describtions[classid]["name_color"],
-        "icon_url": describtions[classid]["icon_url"],
-        "type": describtions[classid]["type"],
-    }
+# def preprocess_assets(db_session: Session, steamid: str, inventory: dict):
+#     describtions = {describtion["classid"]: describtion for describtion in inventory["descriptions"]}
+#     buyin_prices = {classid: 2.0 for classid in describtions.keys()}  # changed # TODO: fetch buyin
+#
+#     assets = []
+#     for asset in inventory["assets"]:
+#         marktable = describtions[asset["classid"]]["marketable"]
+#         classid = asset["classid"]
+#         item = item_from_describtions(classid=classid, describtions=describtions)
+#
+#         if marktable:
+#             items_service.create_if_not_exist(
+#                 db_session=db_session,
+#                 item_in=item,
+#             )
+#             assets += [{
+#                 "steamid": steamid,
+#                 "appid": asset["appid"],
+#                 "contextid": asset["contextid"],
+#                 "assetid": asset["assetid"],
+#                 "classid": asset["classid"],
+#                 "instanceid": asset["instanceid"],
+#                 "amount": asset["amount"],
+#                 "buyin": buyin_prices[asset["classid"]]
+#             }]
+#
+#     return assets
 
 
-def buyin_table(marketable_assets_in: list[dict]):
-    buyin_prices = {}
-    for asset in marketable_assets_in:
-        if not asset["classid"] in buyin_prices:
-            #TODO: get buyin
-            buyin_prices[asset["classid"]] = 2.0
-    return buyin_prices
-
-def assign_to_stack(db_session: Session, buyin_table: dict, marketable_assets_in: list[dict]):
-    for asset in marketable_assets_in:
-        asset_stack = asset_stacks_service.get_id_by_classid_and_buyin(db_session=db_session,
-            steamid=asset["steamid"], classid=asset["classid"], buyin= buyin_table[asset["classid"]])
-        if asset_stack is not None:
-            asset["asset_stackid"] = asset_stack.id
-        else:
-            asset_stack_id= asset_stacks_service.create(db_session=db_session,asset_stack_in={
-                "classid": asset["classid"],
-                "steamid": asset["steamid"],
-                "buyin": buyin_table[asset["classid"]],
-                "virtual": 0,
-                "virtual_size":None
-            })
-            asset["asset_stackid"] = asset_stack_id
-    return marketable_assets_in
+# def item_from_describtions(classid: str, describtions: dict):
+#     """describtions dict must be in format {%classid%: {...},...}"""
+#     return {
+#         "classid": describtions[classid]["classid"],
+#         "appid": describtions[classid]["appid"],
+#         "market_hash_name": describtions[classid]["market_hash_name"],
+#         "name": describtions[classid]["name"],
+#         "background_color": describtions[classid]["background_color"],
+#         "name_color": describtions[classid]["name_color"],
+#         "icon_url": describtions[classid]["icon_url"],
+#         "type": describtions[classid]["type"],
+#     }
 
 
+# def assign_to_stack(db_session: Session, preprocessed_assets: list[dict]):
+#     for asset in preprocessed_assets:
+#         asset["asset_stackid"] = asset_stacks_service.create_if_not_exist(
+#             db_session=db_session,
+#             asset_stack_in={
+#                 "classid": asset["classid"],
+#                 "steamid": asset["steamid"],
+#                 "buyin": asset.pop("buyin"),  # changed
+#                 "virtual": 0,
+#                 "virtual_size": None
+#             })
+#     return preprocessed_assets
 
-
-
-
-
-#stacks = preprocess_asset_stacks(get_session(),76561198086314296, {})
-#print(stacks[0].classid)
+# stacks = preprocess_asset_stacks(get_session(),76561198086314296, {})
+# print(stacks[0].classid)
