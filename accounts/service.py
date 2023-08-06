@@ -9,7 +9,7 @@ def create(*, db_session: Session, account):
         sa.insert(Account).
         values(account)
     )
-    db_session.add(stmt)
+    db_session.execute(stmt)
     db_session.commit()
 
 

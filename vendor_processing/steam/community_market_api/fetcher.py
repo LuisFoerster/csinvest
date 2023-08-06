@@ -1,4 +1,5 @@
 import time
+import json
 
 import requests
 from sqlalchemy.orm import Session
@@ -9,7 +10,7 @@ import vendor_offers.service as vendor_offers_service
 from database.session import get_session
 from vendor_processing.steam.community_market_api.endpoints import get_some_items, get_inventory
 from vendor_processing.steam.community_market_api.preprocessing import preprocess_item, preprocess_offer, \
-    preprocess_asset
+    preprocess_asset, generate_asset_groups
 
 session = get_session()
 
@@ -51,16 +52,49 @@ def fetch_and_update_all_items():
 
 
 def fetch_inventory(db_session: Session, steamid):
-    inventory = get_inventory(steamid)
-    # inventory["describtions"]["some_classid"]["tradable"] jetzt aufrufbar
+
+    """setup for logging"""
+    logging_data = {
+        "steamid": steamid,
+        "items_in_inventory": 0,
+        "marktable_items": 0,
+        "items_added_to_db": 0,
+        "assets_added_to_db": 0,
+        "duration": 0,
+    }
+
+    start_time = time.time()
+
+    """For testing for real usage use: inventory = get_inventory(steamid) """
+    inventory = get_inventory_dummy()
+
+    logging_data["items_in_inventory"] = inventory["total_inventory_count"]
+
     describtions = {describtion["classid"]: describtion for describtion in inventory["descriptions"]}
-    assets_in = list(
+    assets_to_insert = list(
         filter(lambda asset: asset is not None,
-               map(lambda asset: preprocess_asset(db_session=db_session, asset_in=asset, describtions=describtions),
+               map(lambda asset: preprocess_asset(
+                   db_session=db_session,steamid=steamid, asset_in=asset,
+                   describtions=describtions, logging_data=logging_data),
                    inventory["assets"]))
     )
-    assets_service.create_or_update(db_session=session, assets_in=assets_in)
+
+    logging_data["assets_added_to_db"] = len(assets_to_insert) if assets_to_insert is not None else 0
+    asset_groups = generate_asset_groups(steamid=steamid, assets_in=assets_to_insert)
 
 
-# fetch_some_items(0, 100)
-fetch_inventory(db_session=session, steamid="76561198202508143")
+    assets_service.create_or_update(db_session=session, assets_in=assets_to_insert)
+
+    end_time = time.time()
+    logging_data["duration"] = end_time - start_time
+    print(logging_data)
+
+fetch_some_items(0, 100)
+#fetch_inventory(db_session=session, steamid="76561198202508143")
+
+
+def get_inventory_dummy():
+    with open('../api_responses/inventory_response.json', 'r', encoding="utf-8") as file:
+        # Lese den Inhalt der Datei
+        data = file.read()
+    return  json.loads(data)

@@ -5,18 +5,18 @@ from database.base import Base
 """ sqlalchemy models """
 
 
-class AssetStack(Base):
-    __tablename__ = "assetstacks"
+class BuyinStack(Base):
+    __tablename__ = "buyinstacks"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    classid = Column(ForeignKey("items.classid"))
-    steamid = Column(ForeignKey("accounts.steamid"))
-    average_buyin = Column(Float)
+    assetid = Column(ForeignKey("assets.assetid"))
+    asset_stackid = Column(ForeignKey("assetstacks.id"))
+    buyin = Column(Float)
     size = Column(Integer)
+    virtual = Column(Boolean)
     updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
-    item = relationship("Item", back_populates="asset_stacks")
-    account = relationship("Account", back_populates="asset_stacks")
-    buyin_stacks = relationship("BuyinStack", back_populates="asset_stack", cascade="all, delete-orphan")
+    asset = relationship("Asset", back_populates="buyin_stacks")
+    asset_stack = relationship("AssetStack", back_populates="buyin_stacks")
 
 """ pydantic models """

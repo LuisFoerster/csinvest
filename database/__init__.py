@@ -5,3 +5,4 @@ import vendor_offers.models # noqa
 import accounts.models # noqa
 import assets.models # noqa
 import asset_stacks.models # noqa
+import buyin_stacks.models
