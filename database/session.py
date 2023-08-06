@@ -6,6 +6,7 @@ engine = create_engine(settings.db_url())
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
+
 def get_session() -> Session:
     db = SessionLocal()
     try:

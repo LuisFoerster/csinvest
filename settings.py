@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     STEAM_WEBAPI_KEY: str
 
     class Config:
-        env_file = "C:\\Users\\tomcl\\PycharmProjects\\csinvest\\.env"
+        env_file = "C:\\Users\\Luis\\PycharmProjects\\csinvestApp\\.env"
 
     def db_url(self) -> str:
         if self.MARIADB_USER == "root":

@@ -14,6 +14,7 @@ class Item(Base):
     appid = Column(Integer)
     market_hash_name = Column(Text)
     name = Column(Text)
+    item_nameid = Column(String(64))
     icon_url = Column(Text)
     background_color = Column(String(64))
     name_color = Column(String(64))
@@ -22,7 +23,8 @@ class Item(Base):
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     vendor_offers = relationship("VendorOffer", back_populates="item", cascade="all, delete-orphan")
-
+    assets = relationship("Asset", back_populates="item", cascade="all, delete-orphan")
+    asset_stacks = relationship("AssetStack", back_populates="item", cascade="all, delete-orphan")
 
 """ pydantic models """
 

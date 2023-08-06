@@ -6,7 +6,8 @@ from items.models import Item
 
 
 def create(*, db_session: Session, item_in):
-    db_session.bulk_insert_mappings(Item, item_in)
+    stmt = sa.insert(Item).values(item_in)
+    db_session.execute(stmt)
     db_session.commit()
 
 
@@ -50,3 +51,4 @@ def get_classid_by_market_hash_name(*, db_session: Session, market_hash_name: st
     )
     result = db_session.execute(stmt).scalar()
     return result
+
