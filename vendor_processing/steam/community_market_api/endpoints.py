@@ -87,4 +87,20 @@ def get_item_nameid(market_hash_name: str):
         return None
 
 
+def get_item_price(market_hash_name):
+    url = 'https://steamcommunity.com/market/priceoverview/'
+    params = {"appid": 730, "currency": 0, "market_hash_name": market_hash_name}
+    headers = {"Accept-Language": "de-DE", "Accept": "application/json, text/javascript, */*; q=0.01"}
+    try:
+        response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error occurred while making the API request: {e}")
+        return None
+    except ValueError as e:
+        # Handle JSON decoding errors
+        print(f"Error occurred while parsing JSON response: {e}")
+        return None
+
 #print(get_item_orders_histogram(get_item_nameid("Revolution Case")))

@@ -3,15 +3,16 @@ import json
 
 import requests
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timedelta
 import assets.service as assets_service
 import asset_stacks.service as asset_stack_service
+
 import items.service as items_service
 import vendor_offers.service as vendor_offers_service
 from database.session import get_session
-from vendor_processing.steam.community_market_api.endpoints import get_some_items, get_inventory
+from vendor_processing.steam.community_market_api.endpoints import get_some_items, get_inventory, get_item_price
 from vendor_processing.steam.community_market_api.preprocessing import preprocess_item, preprocess_offer, \
-    preprocess_asset, buyin_table, group_buyin, assign_to_stack
+    preprocess_asset, buyin_table,  assign_to_stack
 
 session = get_session()
 
@@ -96,7 +97,34 @@ def fetch_inventory(db_session: Session, steamid):
     logging_data["duration"] = end_time - start_time
     print(logging_data)
 
+def fetch_item_price(db_session: Session, market_hash_name, classid):
+    price = get_item_price(market_hash_name)
+    offer = {
+        "classid": classid,
+        "vendorid": 1, #for steam
+        "lowest_price": float(price["lowest_price"].replace('$', '').replace(',', '.')),
+        "median_price": float(price["median_price"].replace('$', '').replace(',', '.')),
+        "sell_listings": None,
+        "affiliate_link": "https://steamcommunity.com/market/listings/730/" + market_hash_name,
+    }
+    vendor_offers_service.create_or_update_without_sell_listings(db_session=db_session, offers_in=offer)
+
+def update_item_price_if_old(db_session: Session, market_hash_name, classid):
+    update_time_stamp = vendor_offers_service.get_update_timestamp(db_session=db_session, classid=classid, vendorid=1)
+    if update_time_stamp is None:
+        print("Item doesn't exist")
+        return
+    if update_time_stamp <= datetime.now() - timedelta(minutes=125):
+        fetch_item_price(db_session=db_session, market_hash_name=market_hash_name, classid=classid)
+        print("Item " +market_hash_name+" updated")
+    else:
+        print("Item " + market_hash_name+" already up to date")
+
+
+
+update_item_price_if_old(db_session=session, market_hash_name="Shadow Case", classid="1293508920" )
+
 #fetch_some_items(0, 100)
-fetch_inventory(db_session=session, steamid="76561198086314296")
+#fetch_inventory(db_session=session, steamid="76561198086314296")
 
 

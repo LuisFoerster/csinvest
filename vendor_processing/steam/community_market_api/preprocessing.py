@@ -42,6 +42,7 @@ def cent_to_euro(amount_cent):
         return None
 
 
+
 def preprocess_asset(db_session: Session, steamid:str ,asset_in: dict, describtions: dict, logging_data = dict):
     """describtions dict must be in format {%classid%: {...},...}"""
     marktable = describtions[asset_in["classid"]]["marketable"]

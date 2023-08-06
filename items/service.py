@@ -51,3 +51,4 @@ def get_classid_by_market_hash_name(*, db_session: Session, market_hash_name: st
     )
     result = db_session.execute(stmt).scalar()
     return result
+
