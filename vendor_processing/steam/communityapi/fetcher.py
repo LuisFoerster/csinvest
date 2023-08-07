@@ -8,11 +8,13 @@ import assets.service as assets_service
 import asset_stacks.service as asset_stacks_service
 
 import items.service as items_service
+import price_histories.service as price_histories_service
 import vendor_offers.service as vendor_offers_service
 from database.session import get_session
-from vendor_processing.steam.community_market_api.endpoints import get_some_items, get_inventory, get_item_price
-from vendor_processing.steam.community_market_api.preprocessing import preprocess_item, preprocess_offer, \
-    assign_to_stack, preprocess_assets
+from vendor_processing.steam.communityapi.preprocessing import cent_to_euro
+from vendor_processing.steam.communityapi.endpoints import get_some_items, get_inventory, get_item_price, get_pricehistory, get_item_nameid
+
+
 
 session = get_session()
 
@@ -24,20 +26,46 @@ def get_inventory_dummy():
     return json.loads(data)
 
 
-def fetch_some_items(start: int, count: int):
+def fetch_some_items(db_session: Session,start: int, count: int):
     items = get_some_items(start, count)
-    item_data = list(map(lambda x: preprocess_item(x), items["results"]))
-    offer_data = list(map(lambda x: preprocess_offer(x), items["results"]))
-    print("\n\n")
-    print(items)
+    item_data = list(map(lambda item: {
+        "classid": item["asset_description"]["classid"],
+        "appid": item["asset_description"]["appid"],
+        "market_hash_name": item["asset_description"]["market_hash_name"],
+        "name": item["asset_description"]["name"],
+        "item_nameid":  0, #get_item_nameid(item_in["asset_description"]["market_hash_name"]), Problems, because too many requests
+        "background_color": item["asset_description"]["background_color"],
+        "name_color": item["asset_description"]["name_color"],
+        "icon_url": item["asset_description"]["icon_url"],
+        "type": item["asset_description"]["type"],
+    },
+                        items["results"]))
+
+    offer_data = list(map(lambda item: {
+            "classid": item["asset_description"]["classid"],
+            "lowest_price": cent_to_euro(item["sell_price"]),
+            "median_price": cent_to_euro(item["sell_price"]),
+            "sell_listings": item["sell_listings"],
+            "affiliate_link": "https://steamcommunity.com/market/listings/730/" + item["asset_description"][
+                "market_hash_name"],
+            "vendorid": 1
+        },
+                          items["results"]))
+
+    print("\n")
     print("fetched " + str(len(items["results"])) + " items from steam community market")
-    print("\n\n")
-    items_service.create_or_skip(db_session=session, items_in=item_data)
-    vendor_offers_service.create_or_update(db_session=session, offers_in=offer_data)
+    print("\n")
+    items_service.create_or_skip(db_session=db_session, items_in=item_data)
+    vendor_offers_service.create_or_update(db_session=db_session, offers_in=offer_data)
+    for item in item_data:
+        fetch_price_history(db_session=db_session,
+                            market_hash_name=item["market_hash_name"],
+                            classid=item["classid"])
 
 
-def fetch_and_update_all_items():
-    start = 2100
+
+def fetch_and_update_all_items(db_session):
+    start = 11500 #to get 0 -2100
     try:
         total_count = get_some_items(0, 1)["total_count"]
     except Exception as e:
@@ -50,7 +78,7 @@ def fetch_and_update_all_items():
         failed = True
         while trys < 5 and failed:
             try:
-                fetch_some_items(start, 100)
+                fetch_some_items(db_session, start, 100)
                 print("fetched")
                 failed = False
             except Exception as e:
@@ -60,24 +88,43 @@ def fetch_and_update_all_items():
         start += 100
 
 
+
 def fetch_inventory(db_session: Session, steamid):
+    assets = []
+    asset_stackid_tabel = {}
     # fetching # TODO: use get_inventory(steamid)
     inventory = get_inventory_dummy()
     # filter assets and descriptions
     descriptions = {description["classid"]: description for description in inventory["descriptions"] if
                     description["marketable"]}
-    assets = [asset for asset in inventory["assets"] if
-              descriptions.get(asset["classid"], False)]  # if not in describtions not marketable
 
     for classid in descriptions.keys():
         # TODO: fetch buyin
         descriptions[classid]["buyin"] = 2.0
         # item creation if it doesnt exist for any unique classid
-        items_service.create_if_not_exist(
-            db_session=db_session,
-            item_in=descriptions[classid]
-        )
+        if not items_service.exists(db_session=db_session, classid=classid):
+            item_nameid = get_item_nameid(descriptions[classid]["market_hash_name"])
+            items_service.create(db_session=db_session, item_in={
+                "classid": classid,
+                "appid": descriptions[classid]["appid"],
+                "market_hash_name": descriptions[classid]["market_hash_name"],
+                "name": descriptions[classid]["name"],
+                "item_nameid": item_nameid,
+                "background_color": descriptions[classid]["background_color"],
+                "name_color": descriptions[classid]["name_color"],
+                "icon_url": descriptions[classid]["icon_url"],
+                "type": descriptions[classid]["type"],
+            })
+
+
+        #OLD
+        # items_service.create_if_not_exist(
+        #     db_session=db_session,
+        #     item_in=descriptions[classid]
+        # )
         # stack creation if it doesnt exist for any unique classid
+
+
         stackid = asset_stacks_service.create_if_not_exist(
             db_session=db_session,
             asset_stack_in={
@@ -88,7 +135,14 @@ def fetch_inventory(db_session: Session, steamid):
                 "virtual_size": None
             }
         )
-        descriptions[classid]["stackid"] = stackid
+        asset_stackid_tabel[classid] = stackid
+
+    for asset in inventory["assets"]:
+        if  descriptions.get(asset["classid"], False):
+            asset["asset_stackid"] = asset_stackid_tabel[asset["classid"]]
+            asset["steamid"] = steamid
+            assets.append(asset)
+
 
     newest_update_timestamp = assets_service.get_timestamp_of_last_update(db_session=db_session, steamid=steamid)
 
@@ -168,14 +222,33 @@ def update_item_price_if_old(db_session: Session, market_hash_name, classid):
     if update_time_stamp is None:
         print("Item doesn't exist")
         return
-    if update_time_stamp <= datetime.now() - timedelta(minutes=125):
+    if update_time_stamp <= datetime.now() - timedelta(minutes=5):
         fetch_item_price(db_session=db_session, market_hash_name=market_hash_name, classid=classid)
         print("Item " + market_hash_name + " updated")
     else:
         print("Item " + market_hash_name + " already up to date")
 
 
-# update_item_price_if_old(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
+def fetch_price_history(db_session: Session, market_hash_name, classid):
+    price_history = get_pricehistory(market_hash_name = market_hash_name)
+    history_listings = list(map(lambda x: {
+                            "classid": classid,
+                            "vendorid": 1,
+                            "time_stamp": datetime.strptime(x[0].replace(": +0", ""), "%b %d %Y %H").strftime("%Y-%m-%d %H:%M:%S"),
+                            "volume": x[2],
+                            "price": x[1]
+                            }
+                           ,price_history["prices"]))
+    price_histories_service.create_or_update(db_session= db_session, history_listing_in=history_listings)
+    print("\n")
+    print("fetched Priehistory from: " + market_hash_name )
+    print("\n")
 
+
+
+
+#update_item_price_if_old(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
+#fetch_price_history(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
 # fetch_some_items(0, 100)
-fetch_inventory(db_session=session, steamid="76561198086314296")
+#fetch_inventory(db_session=session, steamid="76561198086314296")
+fetch_and_update_all_items(db_session=session)

@@ -25,6 +25,7 @@ class Item(Base):
     vendor_offers = relationship("VendorOffer", back_populates="item", cascade="all, delete-orphan")
     assets = relationship("Asset", back_populates="item", cascade="all, delete-orphan")
     asset_stacks = relationship("AssetStack", back_populates="item", cascade="all, delete-orphan")
+    history_listings = relationship("HistoryListing", back_populates="item", cascade="all, delete-orphan")
 
 """ pydantic models """
 
@@ -38,3 +39,4 @@ class ItemBase(BaseModel):
 
 class ItemWithVendorOffers(ItemBase):
     vendor_offers: list[VendorOfferBase] = []
+

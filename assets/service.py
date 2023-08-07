@@ -20,6 +20,7 @@ def create_or_update(*, db_session: Session, assets_in):
     )
 
     update_stmt = stmt.on_duplicate_key_update(
+
         updated_at=func.current_timestamp()
     )
 
