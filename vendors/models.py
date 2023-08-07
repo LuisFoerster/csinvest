@@ -17,7 +17,7 @@ class Vendor(Base):
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     vendor_offers = relationship("VendorOffer", back_populates="vendor", cascade="all, delete-orphan")
-
+    history_listings = relationship("HistoryListing", back_populates="vendor", cascade="all, delete-orphan")
 
 """ pydantic models """
 

@@ -1,7 +1,11 @@
 import sqlalchemy as sa
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from asset_stacks.models import AssetStack
+from assets.models import Asset
+from database.session import get_session
+from items.models import Item
 
 
 def create(*, db_session: Session, asset_stack_in: dict):
@@ -75,3 +79,19 @@ def create_if_not_exist(*, db_session: Session, asset_stack_in: dict):
         stackid = create(db_session=db_session, asset_stack_in=asset_stack_in)
 
     return stackid
+
+# def get_asset_count_for_each_stack(*, db_session: Session, steamid):
+#     result = db_session.query(
+#         Item.market_hash_name,
+#         func.count(Asset.assetid).label("size"),
+#         AssetStack.buyin,
+#         AssetStack.virtual
+#     ).join(AssetStack, AssetStack.id == Asset.asset_stackid).join(Item, Item.classid == Asset.classid) \
+#         .where(Asset.steamid == steamid).group_by(AssetStack.id).all()
+#
+#     return result
+
+
+
+
+
