@@ -247,8 +247,8 @@ def fetch_price_history(db_session: Session, market_hash_name, classid):
 
 
 
-#update_item_price_if_old(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
-#fetch_price_history(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
+# update_item_price_if_old(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
+# fetch_price_history(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
 # fetch_some_items(0, 100)
-#fetch_inventory(db_session=session, steamid="76561198086314296")
-fetch_and_update_all_items(db_session=session)
+# fetch_inventory(db_session=session, steamid="76561198086314296")
+# fetch_and_update_all_items(db_session=session)

@@ -1,5 +1,8 @@
 <script setup>
 
+  const { caseName, skinName, year, dropPool } = defineProps([
+    'icon_url','caseName', 'skinName', 'year', 'dropPool'
+  ]);
 </script>
 
 <template>
@@ -9,18 +12,22 @@
     <div class="flex items-center">
       <div class="w-40 h-40 md:w-56 md:h-56">
         <a href="#">
-        <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXU5A1PIYQNqhpOSV-fRPasw8rsUFJ5KBFZv668FFU4naLOJzgUuYqyzIaIxa6jMOLXxGkHvcMjibmU99Sg3Qaw-hA_ZWrzLISLMlhpgJJUhGE/360fx360f" alt="Loading_Error">
+        <img :src="'https://community.akamai.steamstatic.com/economy/image/'+icon_url" alt="Loading_Error">
         </a>
       </div>
-      <!-- Mittleres Element -->
-      <div class="">
-        <h3>weaponcase</h3>
-        <a href="#">
-            <h2>Snakebite</h2>
-        </a>
-        <h3>2018</h3>
-        <h3>discountinued Droppool</h3>
+
+      <div>
+        <!-- Mittleres Element -->
+        <div>
+          <h3>{{ caseName }}</h3>
+          <a href="#">
+            <h2>{{ skinName }}</h2>
+          </a>
+          <h3>{{ year }}</h3>
+          <h3>{{ dropPool }}</h3>
+        </div>
       </div>
+
     </div>
     <!-- Rechtes Element -->
     <div class="flex items-center lg:space-x-32">
