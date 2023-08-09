@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Float, Boolean, text, Integer, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
 from database.base import Base
-from pydantic import BaseModel, model_validator
-
+from pydantic import BaseModel, model_validator, root_validator, ConfigDict
+import warnings
+import typing
 
 """ sqlalchemy models """
 
@@ -24,25 +25,36 @@ class AssetStack(Base):
 
 """ pydantic models """
 
-class DepotBase(BaseModel):
-    user_name: str
+# class DepotBase(BaseModel):
+#     user_name: str
 
 class AssetStackBase(BaseModel):
     market_hash_name: str
+    asset_stackid: int
     size: int
+    classid: str
     buyin: float
     virtual: bool
+    lowest_price: float
+    total_buyin: float
+    current_value: float
+
 
 class Depot(BaseModel):
-    # def __init__(self, *args, **kwargs):
-    #     self.calculate_total_buyin()
 
-    asset_stacks : list[AssetStackBase]  =[]
-    total_buyin: float = 0
+    asset_stacks: list[AssetStackBase]
+    depot_buyin: float = 0
+    depot_value: float = 0
+    total_items: int = 0
 
-    # @property
-    # def total_buyin(self):
-    #     total_buyin = sum(each.buyin for each in self.asset_stacks)
-
+    model_config = ConfigDict(from_attributes=True)
+    @model_validator(mode= "after")
+    def compute_total(self) -> dict:
+        depot_buyin = sum(each.total_buyin for each in self.asset_stacks)
+        depot_value = sum(each.current_value for each in self.asset_stacks)
+        total_items = sum(each.size for each in self.asset_stacks)
+        self.depot_buyin = depot_buyin
+        self.depot_value = depot_value
+        self.total_items = total_items
 
 

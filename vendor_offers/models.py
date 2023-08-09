@@ -32,12 +32,10 @@ class VendorOffer(Base):
 
 class VendorOfferBase(BaseModel):
     vendorid: int
-    # affiliate_link: str
     lowest_price: float
     median_price: float
     affiliate_link: str
     sell_listings: int
-
 
 class VendorOfferRead(VendorOfferBase):
     pass

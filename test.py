@@ -18,17 +18,23 @@ result =price_histories_service.get_total_market_price_volume_over_timespan(db_s
                                                    time_to= datetime.now())
 print(result)
 
-result = get_asset_count_for_each_stack(db_session=get_session(), steamid="76561198086314296")
-print(result)
-AssetStacks = []
-for each in result:
-    AssetStacks.append({
-        "market_hash_name" : each[0],
-        "size": each[1],
-        "buyin": each[2],
-        "virtual": each[3]
-    })
-
-
-
-Depot(asset_stacks = AssetStacks)
+# result = get_asset_count_for_each_stack(db_session=get_session(), steamid="76561198086314296")
+# asset_stacks = {"asset_stacks":[r._asdict() for r in result]}
+# print(asset_stacks)
+# print(Depot(**asset_stacks))
+# print(Depot.total_buyin)
+#print(result)
+# print(result)
+# AssetStacks = []
+# for each in result:
+#     AssetStacks.append({
+#         "market_hash_name" : each[0],
+#         "size": each[1],
+#         "buyin": each[2],
+#         "virtual": each[3]
+#     })
+#
+#
+#
+# Depot(asset_stacks = AssetStacks)
+# print(Depot.total_buyin)

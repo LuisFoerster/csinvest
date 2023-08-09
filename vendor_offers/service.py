@@ -62,3 +62,11 @@ def get_update_timestamp(*, db_session: Session, classid: str, vendorid: int):
     return result.updated_at
 
 
+def exists(*, db_session: Session, classid: str, vendorid: int):
+    stmt = (
+        sa.select(VendorOffer)
+        .where(VendorOffer.classid == classid)
+        .where(VendorOffer.vendorid == vendorid)
+    )
+    result = db_session.execute(stmt).scalar()
+    return result
