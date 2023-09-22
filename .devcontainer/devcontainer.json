@@ -35,8 +35,8 @@
 				"GitHub.copilot",
 				"usernamehw.errorlens",
 				"Gruntfuggly.todo-tree",
-				//"ms-python.pylint",
-				"ms-python.black-formatter"
+				"ms-python.black-formatter",
+				"GitHub.vscode-pull-request-github"
 			]
 		}
 	},
