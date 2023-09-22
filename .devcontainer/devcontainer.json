@@ -11,10 +11,19 @@
 	"customizations": {
 		"vscode": {
 			"settings": {
-				"python.pythonPath": "./.venv/bin/python"
+				"python.pythonPath": "./.venv/bin/python",
+				"editor.defaultFormatter": "ms-python.vscode-pylance",
+				"editor.formatOnSave": true
 			},
 			"extensions": [
-				"tamasfe.even-better-toml"
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"tamasfe.even-better-toml",
+				"Vue.volar",
+				"Vue.vscode-typescript-vue-plugin",
+				"GitHub.copilot",
+				"usernamehw.errorlens",
+				"Gruntfuggly.todo-tree"
 			]
 		}
 	},
