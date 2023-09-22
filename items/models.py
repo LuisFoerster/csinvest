@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from sqlalchemy import Column, String, Text, text, Integer, DateTime, func
 from sqlalchemy.orm import relationship
-
-from database.base import Base
 from vendor_offers.models import VendorOfferBase
+from database.base import Base
+
 
 """ sqlalchemy models """
 

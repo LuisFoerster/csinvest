@@ -7,12 +7,12 @@ session = get_session()
 
 
 def fetch_items():
+    pass
     items = get_all_items_from_skinport()
 
     offer_data = list(
-        filter(lambda x: x is not None, map(lambda x: preprocess_offer(db_session=session, data=x), items)))
+       filter(lambda x: x is not None, map(lambda x: preprocess_offer(db_session=session, data=x), items)))
 
-    print(offer_data)
 
     vendor_offers_service.create_or_update(db_session=session, offers_in=offer_data)
 

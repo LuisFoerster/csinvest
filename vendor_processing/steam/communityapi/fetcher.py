@@ -65,7 +65,10 @@ def fetch_some_items(db_session: Session,start: int, count: int):
 
 
 def fetch_and_update_all_items(db_session):
-    start = 11500 #to get 0 -2100
+    start = 300
+
+
+    #to get 0 -2100
     try:
         total_count = get_some_items(0, 1)["total_count"]
     except Exception as e:
@@ -92,8 +95,10 @@ def fetch_and_update_all_items(db_session):
 def fetch_inventory(db_session: Session, steamid):
     assets = []
     asset_stackid_tabel = {}
-    # fetching # TODO: use get_inventory(steamid)
-    inventory = get_inventory_dummy()
+    inventory  = get_inventory(steamid)
+    print("total inventory count: "+ str(inventory["total_inventory_count"]))
+    print("itemcount in assets: " +str(len(inventory["assets"])))
+    #inventory = get_inventory_dummy()
     # filter assets and descriptions
     descriptions = {description["classid"]: description for description in inventory["descriptions"] if
                     description["marketable"]}
@@ -115,6 +120,9 @@ def fetch_inventory(db_session: Session, steamid):
                 "icon_url": descriptions[classid]["icon_url"],
                 "type": descriptions[classid]["type"],
             })
+
+        if not vendor_offers_service.exists(db_session= db_session, classid=classid, vendorid=1):
+            fetch_item_price(db_session=db_session, market_hash_name=descriptions[classid]["market_hash_name"], classid=classid)
 
 
         #OLD
@@ -248,7 +256,7 @@ def fetch_price_history(db_session: Session, market_hash_name, classid):
 
 
 # update_item_price_if_old(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
-# fetch_price_history(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
+#fetch_price_history(db_session=session, market_hash_name="Shadow Case", classid="1293508920")
 # fetch_some_items(0, 100)
-# fetch_inventory(db_session=session, steamid="76561198086314296")
-# fetch_and_update_all_items(db_session=session)
+#fetch_inventory(db_session=session, steamid="76561198245352176")
+fetch_and_update_all_items(db_session=session)

@@ -1,8 +1,11 @@
 <script setup>
-import {ref} from 'vue';
+import {inject, ref, watch} from 'vue';
 
 const showMenu = ref(true);
 const showSearch = ref(false);
+const search_word = ref("")
+
+let search_string = inject("search_string");
 
 const toggleSearch = () => {
     showSearch.value = !showSearch.value;
@@ -19,6 +22,13 @@ const toggleMenu = () => {
     }
 };
 
+
+
+const get_search_string = () => {
+  search_string.value = search_word.value
+  console.log(search_string)
+};
+
 </script>
 
 <template>
@@ -32,7 +42,7 @@ const toggleMenu = () => {
                 </div>
     <!-- Searchbar-->
                 <div>
-                    <input class="hidden md:flex h-[30px] w-[350px] rounded-[100px] bg-white shadow-md py-3 px-4 font-light text-sm focus:outline-none" type="search" placeholder="search for items...">
+                    <input v-model="search_word" @keydown.enter="get_search_string" class="hidden md:flex h-[30px] w-[350px] rounded-[100px] bg-white shadow-md py-3 px-4 font-light text-sm focus:outline-none" type="search" placeholder="search for items...">
                 </div>
     <!-- Nav Links-->
                 <div class="space-x-6 hidden lg:flex">
@@ -74,8 +84,8 @@ const toggleMenu = () => {
             <a href="#" class="block py-2 px-4 text-sm text-white hover:bg-gray-300 btn-transition">Profile</a>
         </div>
     <!-- Search Bar -->
-        <div class="md:hidden" v-if="showSearch">
-          <input class="flex mx-auto my-4 h-[30px] w-[350px] rounded-[100px] bg-white shadow-md py-3 px-4 font-light text-sm focus:outline-none" type="search" placeholder="search for items...">
+        <div class="md:hidden" v-if="showSearch" >
+          <input v-model="search_string" class="flex mx-auto my-4 h-[30px] w-[350px] rounded-[100px] bg-white shadow-md py-3 px-4 font-light text-sm focus:outline-none" placeholder="search for items...">
         </div>
     </nav>
 

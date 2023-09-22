@@ -2,13 +2,13 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 import items.service as items_service
 from database.session import get_session
 from items.models import ItemWithVendorOffers, Item
 from vendor_offers.models import VendorOffer
-
+from vendors.models import Vendor
 router = APIRouter()
 
 
@@ -30,7 +30,8 @@ async def search(
         max_year: Optional[int] = Query(None, description="Maximum release year"),
         db_session: Session = Depends(get_session)):
 
-    stmt = select(Item)
+    stmt = (select(Item.market_hash_name,Item.icon_url, VendorOffer.lowest_price).
+            join(VendorOffer, VendorOffer.classid == Item.classid and VendorOffer.vendorid == 1))
     if q:
         stmt = stmt.where(Item.market_hash_name.like(f"%{q}%"))
     if rarity:
@@ -38,14 +39,15 @@ async def search(
     if discontinued:
         pass  # TODO: implement
     if min_price:
-        # TODO: implement for differend vendors
+        stmt = stmt.where(VendorOffer.lowest_price > min_price)
         pass
     if max_price:
-        # TODO: implement for differend vendors
+        stmt = stmt.where(VendorOffer.lowest_price < max_price)
         pass
     if min_year:
         pass # TODO: implement
     if max_year:
         pass  # TODO: implement
     result = db_session.execute(stmt).fetchall()
-    return [r.Item.__dict__ for r in result]
+    items = [r._asdict() for r in result]
+    return items

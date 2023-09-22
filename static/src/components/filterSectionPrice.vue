@@ -1,9 +1,8 @@
 <script setup>
 import filterValueInput from "./filterValueIput.vue";
-import { defineProps} from "vue";
+import {defineProps, watch} from "vue";
 
 const { filterSectionName } = defineProps(['filterSectionName']);
-
 </script>
 
 <template>
@@ -14,8 +13,8 @@ const { filterSectionName } = defineProps(['filterSectionName']);
     </div>
     <!-- Filter Inputs -->
     <div class="m-4 lg:ml-6 mb-8 max-w-[130px] flex flex-col ">
-      <filter-value-input form-name="from"></filter-value-input>
-      <filter-value-input form-name="to"></filter-value-input>
+      <filter-value-input form-name="from" ></filter-value-input>
+      <filter-value-input form-name="to" ></filter-value-input>
     </div>
 </div>
 </template>

@@ -18,7 +18,7 @@ class User(Base):
     updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
-    account = relationship("Account", back_populates="user", cascade="all, delete-orphan")
+    #account = relationship("Account", back_populates="user", cascade="all, delete-orphan")
 
 
 """Pydantic Model"""
