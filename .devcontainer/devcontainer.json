@@ -13,7 +13,9 @@
 			"settings": {
 				"python.pythonPath": "./.venv/bin/python",
 				"editor.defaultFormatter": "ms-python.vscode-pylance",
-				"editor.formatOnSave": true
+				"editor.formatOnSave": true,
+				"git.requireGitUserConfig": true,
+				"github.gitAuthentication": true
 			},
 			"extensions": [
 				"ms-python.python",
