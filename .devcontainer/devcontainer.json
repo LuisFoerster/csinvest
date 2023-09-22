@@ -19,7 +19,9 @@
 	"customizations": {
 		"vscode": {
 			"settings": {
+				"python.pythonPath": "./.venv/bin/python",
 				"python.defaultInterpreterPath": "./.venv/bin/python",
+				"editor.defaultFormatter": "ms-python.black-formatter",
 				"python.testing.pytestPath": "/usr/local/py-utils/bin/pytest",
 				"editor.formatOnSave": true
 			},
@@ -33,7 +35,8 @@
 				"GitHub.copilot",
 				"usernamehw.errorlens",
 				"Gruntfuggly.todo-tree",
-				"ms-python.pylint"
+				//"ms-python.pylint",
+				"ms-python.black-formatter"
 			]
 		}
 	},
