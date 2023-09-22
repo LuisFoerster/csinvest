@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "csinvest"
+version = "0.1.0"
+description = ""
+authors = ["tclesius"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.103.1"
+sqlalchemy = "^2.0.21"
+alembic = "^1.12.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+requests = "^2.31.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+pydantic-settings = "^2.0.3"
+pymysql = "^1.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
