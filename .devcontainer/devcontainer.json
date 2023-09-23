@@ -11,7 +11,7 @@
 	],
 	"workspaceFolder": "/workspace",
 	"initializeCommand": "cp .env .devcontainer/.env",
-	//"image": "mcr.microsoft.com/devcontainers/python:1-3.11-bullseye",
+	"postStartCommand": "rm -f .devcontainer/.env", 
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers-contrib/features/poetry:2": {}
@@ -23,7 +23,29 @@
 				"python.defaultInterpreterPath": "./.venv/bin/python",
 				"editor.defaultFormatter": "ms-python.black-formatter",
 				"python.testing.pytestPath": "/usr/local/py-utils/bin/pytest",
-				"editor.formatOnSave": true
+				"editor.formatOnSave": true,
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "zsh"
+					}
+				},
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"sqltools.connections": [
+					{
+						"mysqlOptions": {
+							"authProtocol": "default",
+							"enableSsl": "Disabled"
+						},
+						"previewLimit": 50,
+						"server": "${containerEnv:MARIADB_HOST}",
+						"port": "${containerEnv:MARIADB_PORT}", 
+						"driver": "MariaDB",
+						"name": "${containerEnv:APP_NAME}-root",
+						"database": "${containerEnv:MARIADB_DATABASE}",
+						"username": "root",
+						"password": "${containerEnv:MARIADB_ROOT_PASSWORD}"
+					}
+				]
 			},
 			"extensions": [
 				"ms-python.python",
@@ -36,15 +58,17 @@
 				"usernamehw.errorlens",
 				"Gruntfuggly.todo-tree",
 				"ms-python.black-formatter",
-				"GitHub.vscode-pull-request-github"
+				"GitHub.vscode-pull-request-github",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-mysql",
+				"ms-python.pylint",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	},
 	"forwardPorts": [
-		3000,
-		3306,
-		8080
+		"${containerEnv:MARIADB_PORT}:${containerEnv:MARIADB_PORT}"
 	],
-	"postCreateCommand": "poetry install",
+	"postCreateCommand": "chmod +x .devcontainer/post-install.sh && .devcontainer/post-install.sh",
 	"remoteUser": "vscode"
 }

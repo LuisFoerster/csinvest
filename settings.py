@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     MARIADB_ROOT_PASSWORD: str
 
     STEAM_WEBAPI_KEY: str
+    STEAM_COOKIE: str
 
     class Config:
         env_file = ".env"
