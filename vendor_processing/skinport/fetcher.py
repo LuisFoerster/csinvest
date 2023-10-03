@@ -1,7 +1,7 @@
 from vendor_processing.skinport.endpoints import get_all_tradehistories_from_skinport
 #import vendor_offers.service as vendor_offers_service
 from db_service.migrations import get_session, Session
-import items.service as item_service
+import db_service.items.service as item_service
 import vendor_processing.skinport.service as skinport_service
 
 session = get_session()

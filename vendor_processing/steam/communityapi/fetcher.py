@@ -3,12 +3,12 @@ import json
 
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-import assets.service as assets_service
-import asset_stacks.service as asset_stacks_service
+import db_service.assets.service as assets_service
+import db_service.asset_stacks.service as asset_stacks_service
 
-import items.service as items_service
-import price_histories.service as price_histories_service
-import vendor_offers.service as vendor_offers_service
+import db_service.items.service as items_service
+import db_service.price_histories.service as price_histories_service
+import db_service.vendor_offers.service as vendor_offers_service
 from db_service.migrations import get_session
 from vendor_processing.steam.communityapi.preprocessing import cent_to_euro
 from vendor_processing.steam.communityapi.endpoints import (

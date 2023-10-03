@@ -1,9 +1,6 @@
-import users.models # noqa
-import items.models # noqa
-import vendors.models # noqa
-import vendor_offers.models # noqa
-import accounts.models # noqa
-import assets.models # noqa
-import asset_stacks.models
-import price_histories.models
-import vendor_processing.skinport.models
+import db_service.users.schema  # noqa
+import db_service.items.schema  # noqa
+import db_service.vendors.schema  # noqa
+import db_service.vendor_offers.schema  # noqa
+import db_service.accounts.schema  # noqa
+import db_service.assets.schema  # noqa

@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 
-from auth.views import router as auth_router
-from items.views import router as items_router
-from asset_stacks.views import router as depot_router
+from data_service.auth.views import router as auth_router
+from web_service.items.views import router as items_router
+from web_service.asset_stacks.views import router as depot_router
 
 app = FastAPI()
 app.include_router(auth_router, prefix="/auth")
