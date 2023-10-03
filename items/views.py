@@ -2,13 +2,13 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
 import items.service as items_service
-from database.session import get_session
+from db_service.migrations import get_session
 from items.models import ItemWithVendorOffers, Item
 from vendor_offers.models import VendorOffer
-from vendors.models import Vendor
+
 router = APIRouter()
 
 

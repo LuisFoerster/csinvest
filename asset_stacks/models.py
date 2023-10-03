@@ -1,9 +1,7 @@
 from sqlalchemy import Column, Float, Boolean, text, Integer, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
-from database.base import Base
-from pydantic import BaseModel, model_validator, root_validator, ConfigDict
-import warnings
-import typing
+from db_service.migrations import Base
+from pydantic import BaseModel, model_validator, ConfigDict
 
 """ sqlalchemy models """
 

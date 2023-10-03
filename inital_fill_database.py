@@ -1,10 +1,8 @@
-from database.session import get_session
+from db_service.migrations import get_session
 
 import users.service as user_service
 import accounts.service as accounts_service
 import vendors.service as vendors_service
-import asset_stacks.service as asset_stacks_service
-from vendor_processing.steam.communityapi.endpoints import get_some_items
 from vendor_processing.steam.communityapi.fetcher import fetch_some_items
 
 session = get_session()

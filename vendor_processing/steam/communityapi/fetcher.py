@@ -1,7 +1,6 @@
 import time
 import json
 
-import requests
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import assets.service as assets_service
@@ -10,7 +9,7 @@ import asset_stacks.service as asset_stacks_service
 import items.service as items_service
 import price_histories.service as price_histories_service
 import vendor_offers.service as vendor_offers_service
-from database.session import get_session
+from db_service.migrations import get_session
 from vendor_processing.steam.communityapi.preprocessing import cent_to_euro
 from vendor_processing.steam.communityapi.endpoints import (
     get_some_items,

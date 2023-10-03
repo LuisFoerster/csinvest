@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 
 from asset_stacks.models import AssetStack
 from assets.models import Asset
-from database.session import get_session
 from items.models import Item
 from vendor_offers.models import VendorOffer
 

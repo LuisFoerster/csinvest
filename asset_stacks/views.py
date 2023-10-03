@@ -1,14 +1,10 @@
-from typing import Optional
-
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy import select
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database.session import get_session
+from db_service.migrations import get_session
 
 import asset_stacks.service as asset_stacks_service
 from asset_stacks.models import Depot
 import accounts.service as accounts_service
-from vendor_offers.models import VendorOffer
 from vendor_processing.steam.communityapi.fetcher import fetch_inventory
 
 

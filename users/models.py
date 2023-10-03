@@ -1,10 +1,9 @@
 from datetime import datetime
 
 from sqlalchemy import Column, String, Text, text, func, DateTime, Integer
-from sqlalchemy.orm import relationship
 from pydantic import BaseModel
 
-from database.base import Base
+from db_service.migrations import Base
 
 """SQL-Alchemy Model"""
 

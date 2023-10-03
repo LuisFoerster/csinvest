@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, text, Integer, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
-from database.base import Base
+from db_service.migrations import Base
 
 """ sqlalchemy models """
 

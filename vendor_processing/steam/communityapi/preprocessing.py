@@ -1,11 +1,3 @@
-from sqlalchemy.orm import Session
-
-import items.service as items_service
-import asset_stacks.service as asset_stacks_service
-import assets.service as assets_service
-from database.session import get_session
-from vendor_processing.steam.communityapi.endpoints import get_item_nameid
-
 # def preprocess_item(item_in: dict):
 #     item_nameid = get_item_nameid(item_in["asset_description"]["market_hash_name"])
 #     return {

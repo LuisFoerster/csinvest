@@ -44,9 +44,9 @@ def get_with_vendor_offers(*, db_session: Session, market_hash_name):
     return result.Item.__dict__
 
 
-def get_classid_by_market_hash_name(*, db_session: Session, market_hash_name: str) -> str:
+def get_classid_by_market_hash_name(*, db_session: Session, market_hash_name: str) -> str | None:
     stmt = (
-        sa.select(Item)
+        sa.select(Item.classid)
         .where(Item.market_hash_name == market_hash_name)
     )
     result = db_session.execute(stmt).scalar()

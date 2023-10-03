@@ -23,6 +23,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.setup()
+def startup():
+    f
+    gen_factors()->dict
+
+
 
 if __name__ == "__main__":
     # TODO: get app url from .env

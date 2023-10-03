@@ -6,3 +6,4 @@ import accounts.models # noqa
 import assets.models # noqa
 import asset_stacks.models
 import price_histories.models
+import vendor_processing.skinport.models

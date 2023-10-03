@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from sqlalchemy import Column, Text, text, Integer, DateTime, func, Float, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from database.base import Base
+from db_service.migrations import Base
 
 """ sqlalchemy models """
 
