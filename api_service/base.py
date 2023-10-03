@@ -1,9 +1,7 @@
 import inspect
 from functools import wraps
 
-def _get_args_dict(fn, args, kwargs):
-    args_names = fn.__code__.co_varnames[:fn.__code__.co_argcount]
-    return {**dict(zip(args_names, args)), **kwargs}
+
 class APIMeta(type):
     def __new__(mcs, name, bases, attrs):
         for attr_name, attr_value in attrs.items():
@@ -13,6 +11,7 @@ class APIMeta(type):
 
     @staticmethod
     def request(method):
+        @staticmethod
         @wraps(method)
         def wrapper(self, *args, **kwargs):
             print(f'Common behavior injected in {self.__class__.__name__}')
