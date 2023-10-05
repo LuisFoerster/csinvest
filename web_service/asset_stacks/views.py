@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from db_service.migrations import get_session
 
-import db_service.asset_stacks.service as asset_stacks_service
-from db_service.asset_stacks.schema import Depot
-import db_service.accounts.service as accounts_service
-from vendor_processing.steam.communityapi.fetcher import fetch_inventory
-
+# from db_service. import Depot
+import db_service as accounts_service
+import db_service as asset_stacks_service
+from api_service.steam.communityapi import fetch_inventory
+from db_service.session import get_session
 
 router = APIRouter()
 
-@router.get("/get/" )
+
+@router.get("/get/")
 async def get_inventory(steamid: str, db_session: Session = Depends(get_session)):
     print(steamid)
     if not accounts_service.exists(db_session=db_session, steamid=steamid):
@@ -18,7 +18,6 @@ async def get_inventory(steamid: str, db_session: Session = Depends(get_session)
         accounts_service.create(db_session=db_session, account_in={"steamid": steamid})
         fetch_inventory(db_session=db_session, steamid=steamid)
     result = asset_stacks_service.get_asset_count_for_each_stack(db_session=db_session, steamid=steamid)
-    asset_stacks = {"asset_stacks":[r._asdict() for r in result]}
-
+    asset_stacks = {"asset_stacks": [r._asdict() for r in result]}
 
     return Depot(**asset_stacks)

@@ -1,11 +1,6 @@
-from datetime import datetime
-
 from sqlalchemy import Column, String, Text, text, func, DateTime, Integer
-from pydantic import BaseModel
 
-from db_service.migrations import Base
-
-"""SQL-Alchemy Model"""
+from db_service.base import Base
 
 
 class User(Base):
@@ -17,9 +12,4 @@ class User(Base):
     updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
-    #account = relationship("Account", back_populates="user", cascade="all, delete-orphan")
-
-
-"""Pydantic Model"""
-
-
+    # account = relationship("Account", back_populates="user", cascade="all, delete-orphan")

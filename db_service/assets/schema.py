@@ -1,8 +1,7 @@
 from sqlalchemy import Column, String, text, Integer, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
-from db_service.migrations import Base
 
-""" sqlalchemy models """
+from db_service.base import Base
 
 
 class Asset(Base):
@@ -21,6 +20,3 @@ class Asset(Base):
     item = relationship("Item", back_populates="assets")
     account = relationship("Account", back_populates="assets")
     asset_stack = relationship("AssetStack", back_populates="assets")
-
-
-""" pydantic models """

@@ -16,14 +16,10 @@ def create_or_update(*, db_session: Session, assets_in):
     stmt = (
         mysql_sa.insert(Asset)
         .values(assets_in)
+        .on_duplicate_key_update(updated_at=func.current_timestamp())
     )
 
-    update_stmt = stmt.on_duplicate_key_update(
-
-        updated_at=func.current_timestamp()
-    )
-
-    db_session.execute(update_stmt)
+    db_session.execute(stmt)
     db_session.commit()
 
 

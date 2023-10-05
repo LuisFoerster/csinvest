@@ -33,15 +33,7 @@ def exists(*, db_session: Session, classid) -> bool:
     return db_session.execute(stmt).scalar() is not None
 
 
-def get_with_vendor_offers(*, db_session: Session, market_hash_name):
-    stmt = (
-        sa.select(Item)
-        .where(Item.market_hash_name == market_hash_name)
-        .options(joinedload(Item.vendor_offers))
-    )
-    result = db_session.execute(stmt).unique().fetchone()
 
-    return result.Item.__dict__
 
 
 def get_classid_by_market_hash_name(*, db_session: Session, market_hash_name: str) -> str | None:

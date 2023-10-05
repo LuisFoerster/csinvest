@@ -1,10 +1,7 @@
-from pydantic import BaseModel
 from sqlalchemy import Column, Text, text, Float, Integer, DateTime, func
 from sqlalchemy.orm import relationship
 
-from db_service.migrations import Base
-
-""" sqlalchemy models """
+from db_service.base import Base
 
 
 class Vendor(Base):
@@ -18,9 +15,3 @@ class Vendor(Base):
 
     vendor_offers = relationship("VendorOffer", back_populates="vendor", cascade="all, delete-orphan")
     history_listings = relationship("HistoryListing", back_populates="vendor", cascade="all, delete-orphan")
-
-""" pydantic models """
-
-
-
-

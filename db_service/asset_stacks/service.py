@@ -80,22 +80,8 @@ def create_if_not_exist(*, db_session: Session, asset_stack_in: dict):
 
     return stackid
 
-def get_asset_count_for_each_stack(*, db_session: Session, steamid:str):
 
-    # First Try
-    # stmt = (sa.select(
-    #     Item.market_hash_name,func.count(Asset.assetid).label("size") ,
-    #     AssetStack.buyin,AssetStack.virtual , (func.count(Asset.assetid) * VendorOffer.median_price).label("total_value") ).
-    #     where(AssetStack.steamid == steamid).
-    #     group_by(Asset.asset_stackid).
-    #     join(Item, Item.classid == AssetStack.classid ).
-    #     join(Asset, Asset.asset_stackid == AssetStack.id ).
-    #     join(VendorOffer, VendorOffer.vendorid == 1 and VendorOffer.classid == AssetStack.classid )
-    #         )
-    #
-    #
-    # result = db_session.execute(stmt).fetchall()
-
+def get_asset_count_for_each_stack(*, db_session: Session, steamid: str):
     subquery = (
         db_session.query(
             Item.market_hash_name,
@@ -132,8 +118,3 @@ def get_asset_count_for_each_stack(*, db_session: Session, steamid:str):
     result = query.all()
 
     return result
-
-
-
-
-

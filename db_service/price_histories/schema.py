@@ -1,8 +1,7 @@
 from sqlalchemy import Column, Float, text, Integer, DateTime, func, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
-from db_service.migrations import Base
 
-""" sqlalchemy models """
+from db_service.base import Base
 
 
 class HistoryListing(Base):
@@ -22,6 +21,3 @@ class HistoryListing(Base):
     __table_args__ = (
         UniqueConstraint('classid', 'vendorid', 'time_stamp', name='unique_class_and_vendor_id_and_time_stamp'),
     )
-
-
-""" pydantic models """

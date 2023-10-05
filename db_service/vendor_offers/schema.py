@@ -1,10 +1,7 @@
-from pydantic import BaseModel
 from sqlalchemy import Column, Text, text, Integer, DateTime, func, Float, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from db_service.migrations import Base
-
-""" sqlalchemy models """
+from db_service.base import Base
 
 
 class VendorOffer(Base):
@@ -25,9 +22,3 @@ class VendorOffer(Base):
     __table_args__ = (
         UniqueConstraint('classid', 'vendorid', name='unique_class_and_vendor_id'),
     )
-
-
-""" pydantic models """
-
-
-

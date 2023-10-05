@@ -1,11 +1,7 @@
-from pydantic import BaseModel
 from sqlalchemy import Column, String, Text, text, Integer, DateTime, func
 from sqlalchemy.orm import relationship
-from db_service.vendor_offers.schema import VendorOfferBase
-from db_service.migrations import Base
 
-
-""" sqlalchemy models """
+from db_service.base import Base
 
 
 class Item(Base):
@@ -27,7 +23,3 @@ class Item(Base):
     asset_stacks = relationship("AssetStack", back_populates="item", cascade="all, delete-orphan")
     history_listings = relationship("HistoryListing", back_populates="item", cascade="all, delete-orphan")
     skinport_pricehistory = relationship("SkinportPricehistory", back_populates="item", cascade="all, delete-orphan")
-
-""" pydantic models """
-
-

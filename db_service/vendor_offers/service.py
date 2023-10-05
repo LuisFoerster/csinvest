@@ -6,6 +6,9 @@ from db_service.vendor_offers.schema import VendorOffer
 import sqlalchemy.dialects.mysql as mysql_sa
 
 
+
+# CREATE
+
 def create(*, db_session: Session, item_in):
     db_session.bulk_insert_mappings(VendorOffer, item_in)
     db_session.commit()
@@ -49,6 +52,8 @@ def create_or_update_without_sell_listings(*, db_session: Session, offers_in: li
     db_session.commit()
 
 
+# READ
+
 def get_update_timestamp(*, db_session: Session, classid: str, vendorid: int):
     stmt = (
         sa.select(VendorOffer)
@@ -70,3 +75,12 @@ def exists(*, db_session: Session, classid: str, vendorid: int):
     )
     result = db_session.execute(stmt).scalar()
     return result
+
+def get_current_price(*, db_session: Session, classid: str, vendorid: int):
+    stmt = (
+        sa.select(VendorOffer)
+        .where(VendorOffer.classid == classid)
+        .where(VendorOffer.vendorid == vendorid)
+    )
+    result = db_session.execute(stmt).scalar()
+    return result.lowest_price

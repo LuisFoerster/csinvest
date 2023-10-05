@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
-from db_service.migrations import get_session
+from db_service import get_session
 
 # print(get_classid_by_market_hash_name(db_session=get_session(),market_hash_name="Souvenir Sawed-Off | Rust Coat (Well-Worn)"))
 
-import db_service.price_histories.service as price_histories_service
-
+import db_service as price_histories_service
 
 # result = get_total_item_price_volume_over_timespan(db_session=get_session(), classid="5453609791", time_from=datetime.now() - timedelta(days=30),
 #                                                    time_to= datetime.now())

@@ -1,9 +1,7 @@
-from sqlalchemy import Column, String,Float, text, Integer, DateTime, func, ForeignKey
+from sqlalchemy import Column, String, Float, text, Integer, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
-from db_service.migrations import Base
 
-
-""" sqlalchemy models """
+from db_service.base import Base
 
 
 class SkinportPricehistory(Base):
@@ -16,4 +14,3 @@ class SkinportPricehistory(Base):
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     item = relationship("Item", back_populates="skinport_pricehistory")
-

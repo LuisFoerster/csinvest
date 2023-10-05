@@ -1,14 +1,14 @@
 import re
-
+from settings import settings
 import requests
 from bs4 import BeautifulSoup
-from settings import settings
 
 
-def get_some_items(start, count):
+
+def fetch_some_items(start, count):
     url = "https://steamcommunity.com/market/search/render/"
     params = {
-        "Cookie": settings.STEAM_COOKIE,
+        #"Cookie": settings.STEAM_COOKIE,
         "appid": 730,
         "count": count,
         "start": start,
@@ -37,7 +37,7 @@ def get_some_items(start, count):
         return None
 
 
-def get_inventory(steamid):
+def fetch_inventory(steamid):
     url = f"https://steamcommunity.com/inventory/{steamid}/730/2/?l=english&count=5000"
     headers = {
         "Cookie": settings.STEAM_COOKIE,
@@ -57,7 +57,7 @@ def get_inventory(steamid):
         return None
 
 
-def get_pricehistory(market_hash_name: str):
+def fetch_pricehistory(market_hash_name: str):
     params = {
         "country": "DE",
         "currency": 0,
@@ -78,7 +78,7 @@ def get_pricehistory(market_hash_name: str):
         return None
 
 
-def get_item_orders_histogram(item_nameid: str):
+def fetch_item_orders_histogram(item_nameid: str):
     params = {
         "country": "DE",
         "language": "german",
@@ -98,7 +98,7 @@ def get_item_orders_histogram(item_nameid: str):
         return None
 
 
-def get_item_nameid(market_hash_name: str):
+def fetch_item_nameid(market_hash_name: str):
     headers = {
         "Cookie": settings.STEAM_COOKIE,
         "Accept-Language": "de-DE",
@@ -126,7 +126,7 @@ def get_item_nameid(market_hash_name: str):
         return None
 
 
-def get_item_price(market_hash_name):
+def fetch_item_price(market_hash_name):
     url = "https://steamcommunity.com/market/priceoverview/"
     params = {"appid": 730, "currency": 0, "market_hash_name": market_hash_name}
     headers = {

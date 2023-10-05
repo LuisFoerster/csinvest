@@ -1,8 +1,7 @@
 import sqlalchemy as sa
-import sqlalchemy.dialects.mysql as mysql_sa
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 from sqlalchemy import func
-from vendor_processing.skinport.models import SkinportPricehistory
+from db_service.skinport_pricehistory.schema import SkinportPricehistory
 
 
 def create(*, db_session: Session, data_in):

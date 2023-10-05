@@ -1,4 +1,4 @@
-import db_service.items.service as item_service
+import db_service as item_service
 from sqlalchemy.orm import Session
 
 
