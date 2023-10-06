@@ -1,12 +1,9 @@
 import json
 from datetime import datetime
 
-from api_service.steam.communityapi.endpoints import (
-    fetch_some_items,
-    fetch_inventory,
-    fetch_pricehistory,
-)
+
 from api_service.steam.communityapi.utils import cent_to_euro
+from api_service.steam.communityapi.endpoints import steam_community_endpoints_service
 
 
 def get_inventory_dummy():
@@ -24,7 +21,7 @@ def get_total_count() -> int:
         The total_count, which is the number of all items that can be queried from steam community market.
     """
 
-    raw_data = fetch_some_items(start=0, count=0)
+    raw_data = steam_community_endpoints_service.fetch_some_items(start=0, count=0)
 
     total_count = raw_data["total_count"]
 
@@ -84,9 +81,8 @@ def get_some_items_and_their_offers(*, start: int, count: int):
     item_data = []
     offer_data = []
 
-    raw_data = get_some_items(start, count)
+    raw_data = steam_community_endpoints_service.fetch_some_items(start = start, count = count)
 
-    total_count = raw_data["total_count"]
 
     for item in raw_data["results"]:
         item_nameid = 1  # get_item_nameid(market_hash_name) ISSUE: TO MANY REQUESTS (Only 20 Items possible)
@@ -147,7 +143,7 @@ def get_price_history(*, market_hash_name: str, classid: str):
         """
 
     history_listings = []
-    price_history = fetch_pricehistory(market_hash_name=market_hash_name)
+    price_history = steam_community_endpoints_service.fetch_pricehistory(market_hash_name=market_hash_name)
     for price in price_history["prices"]:
         time_stamp = datetime.strptime(price[0].replace(": +0", ""), "%b %d %Y %H").strftime("%Y-%m-%d %H:%M:%S")
 
@@ -296,7 +292,7 @@ def get_inventory(*, steamid: str):
 
     assets = []
     descriptions = {}
-    inventory = fetch_inventory(steamid)
+    inventory = steam_community_endpoints_service.fetch_inventory(steamid)
     # inventory = get_inventory_dummy()
 
     for description in inventory["descriptions"]:

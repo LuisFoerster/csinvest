@@ -1,3 +1,12 @@
+from uplink import Consumer, get
+
+
+class Skinport(Consumer):
+    @get("https://api.skinport.com/v1/items")
+    def get_items(self, appid: int, currency: str, tradable: bool):
+        """Get some items from skinport"""
+
+
 import requests
 
 

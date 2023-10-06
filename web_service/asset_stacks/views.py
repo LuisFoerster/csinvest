@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 # from db_service. import Depot
 import db_service as accounts_service
 import db_service as asset_stacks_service
-from api_service.steam.communityapi import fetch_inventory
+from api_service.steam.communityapi.endpoints import fetch_inventory
 from db_service.session import get_session
 
 router = APIRouter()

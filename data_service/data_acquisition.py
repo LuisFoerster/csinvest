@@ -16,6 +16,11 @@ def get_all_item_data_from_steam():
     Gets all items and their Data from Steam (Name, Classid, Prices, Pricehistory,...) and safes the Data in DB
 
     """
+
+    #TODO: get Release_date from pricehistory and insert into items.
+    #TODO: get items Info (rarity, Collection) from ClassInfoApi and insert into items.
+    #TODO: split information (quality)
+    #TODO: create relationships and insert in container_content table
     session = db_session_maker.get_session()
 
     start = 0
@@ -29,33 +34,34 @@ def get_all_item_data_from_steam():
 
     while start < total_count:
         print(start)
-        trys = 0
-        failed = True
-        while trys < 5 and failed:
-            # Errorhandling: Retry if TO MANY REQUESTS schould be handled in api_service
-            try:
-                items, offers = steam_api_service.get_some_items_and_their_offers(start=start, count=100)
-                print("fetched")
-                failed = False
-            except Exception as e:
-                print(e)
-                time.sleep(100)
-                trys += 1
-        start += 100
+        history_listings = []
+        items, offers = steam_api_service.get_some_items_and_their_offers(start=start, count=2)
 
-        items_db_service.create_or_skip(db_session=session, items_in=items)
-        vendor_offers_db_service.create_or_update(db_session=session, offers_in=offers)
+        # Get Pricehistory for each item
 
-        print("sucess")
         for item in items:
-            history_listings = steam_api_service.fetch_price_history(
+            history_listings_of_one_item = steam_api_service.get_price_history(
                 market_hash_name=item["market_hash_name"],
                 classid=item["classid"],
             )
+            history_listings += history_listings_of_one_item
+            print(history_listings)
+            print(history_listings_of_one_item)
+            print(history_listings_of_one_item[0]["time_stamp"])
 
-            price_histories_db_service.create_or_update(
-                db_session=session, history_listing_in=history_listings
-            )
+
+        # Insert into DB
+
+        items_db_service.create_or_skip(db_session=session, items_in=items)
+        vendor_offers_db_service.create_or_update(db_session=session, offers_in=offers)
+        price_histories_db_service.create_or_update(
+            db_session=session, history_listing_in=history_listings
+        )
+
+
+        start += 100
+
+
 
 
 def create_or_update_user_depot(*, steamid: str):
@@ -152,5 +158,5 @@ def create_or_update_user_depot(*, steamid: str):
 #     else:
 #         print("Item " + market_hash_name + " already up to date")
 
-# get_all_item_data_from_steam()
-create_or_update_user_depot(steamid="76561198209388244")
+get_all_item_data_from_steam()
+#create_or_update_user_depot(steamid="76561198245352176")

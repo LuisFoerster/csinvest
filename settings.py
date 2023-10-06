@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     STEAM_COOKIE: str
 
     class Config:
-        env_file = ".env"
+        env_file = "../../../.env"
 
     def db_url(self) -> str:
         if self.MARIADB_USER == "root":
