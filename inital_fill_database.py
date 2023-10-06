@@ -1,11 +1,8 @@
-from database.session import get_session
-
-import users.service as user_service
-import accounts.service as accounts_service
-import vendors.service as vendors_service
-import asset_stacks.service as asset_stacks_service
-from vendor_processing.steam.communityapi.endpoints import get_some_items
-from vendor_processing.steam.communityapi.fetcher import fetch_some_items
+import db_service as accounts_service
+import db_service as user_service
+import db_service as vendors_service
+from api_service.steam.communityapi import fetch_some_items
+from db_service import get_session
 
 session = get_session()
 
