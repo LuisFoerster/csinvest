@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 
-from db_service import Vendor
+from db_service.vendors.schema import Vendor
 
 
 def create(*, db_session: Session, vendor_in):

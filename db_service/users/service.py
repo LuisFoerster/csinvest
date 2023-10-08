@@ -1,7 +1,7 @@
 import sqlalchemy
 from sqlalchemy.orm import Session
 
-from db_service import User
+from db_service.users.schema import User
 
 
 def get(*, db_session: Session, steamid: str) -> User:

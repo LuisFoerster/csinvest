@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+
 class VendorOfferBase(BaseModel):
     vendorid: int
     lowest_price: float
