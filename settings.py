@@ -1,3 +1,5 @@
+import pathlib
+
 from pydantic_settings import BaseSettings
 
 
@@ -19,7 +21,7 @@ class Settings(BaseSettings):
     STEAM_COOKIE: str
 
     class Config:
-        env_file = "../../../.env"
+        env_file = f"{pathlib.Path(__file__).resolve().parent}/.env"
 
     def db_url(self) -> str:
         if self.MARIADB_USER == "root":
