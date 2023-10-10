@@ -17,6 +17,7 @@ class SteamPoweredApi(Consumer):
     @get("/ISteamEconomy/GetAssetClassInfo/v0001/")
     def fetch_asset_class_info(self,
                                classid0: Query(type=str),
+                               instanceid0 : Query(type= str | None) = None,
                                appid : Query(type=int) = 730,
                                class_count : Query(type=int) = 1,
                             key: Query(type=str) = settings.STEAM_WEBAPI_KEY
@@ -27,5 +28,3 @@ class SteamPoweredApi(Consumer):
 
 
 steam_powered_api = SteamPoweredApi(base_url="https://api.steampowered.com")
-
-print(steam_powered_api.fetch_asset_class_info("1011953270"))

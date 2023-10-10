@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from db_service.skinport_pricehistory.schema import SkinportPricehistory
+from db_service import SkinportPricehistory
 
 
 def create(*, db_session: Session, data_in):

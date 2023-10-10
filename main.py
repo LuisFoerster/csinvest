@@ -6,6 +6,11 @@ from data_service.auth.views import router as auth_router
 from web_service.shop.views import router as shop_router
 from web_service.asset_stacks.views import router as depot_router
 
+
+
+
+
+
 app = FastAPI()
 app.include_router(auth_router, prefix="/auth")
 app.include_router(shop_router, prefix="/shop")

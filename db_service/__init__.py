@@ -4,4 +4,8 @@ import db_service.vendors.schema  # noqa
 import db_service.vendor_offers.schema  # noqa
 import db_service.accounts.schema  # noqa
 import db_service.assets.schema  # noqa
-import db_service.skinport_pricehistory.schema
+import db_service.asset_stacks.schema  # noqa
+import db_service.skinport_pricehistory.schema # noqa
+import db_service.container_contents.schema # noqa
+import db_service.statistics.schema # noqa
+import db_service.price_histories.schema # noqa
