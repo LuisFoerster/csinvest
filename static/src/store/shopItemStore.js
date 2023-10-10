@@ -1,8 +1,7 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 import {useShopFilterValueStore} from "./shopFilterValue.js";
-import {DefaultService} from "/Users/julianzerback/Desktop/CSGO Invest/csinvest/static/src/client/services/DefaultService.ts";
-
+import {DefaultService} from "../client/index.ts";
 export const useShopItemStore = defineStore('shopItemStore', () => {
 
     const items = ref([]);
