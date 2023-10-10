@@ -81,6 +81,8 @@ def get_some_items_and_their_offers(*, start: int, count: int):
     item_data = []
     offer_data = []
 
+
+
     raw_data = steam_community_endpoints_service.fetch_some_items(start = start, count = count)
 
 
@@ -91,17 +93,24 @@ def get_some_items_and_their_offers(*, start: int, count: int):
         affiliate_link = "https://steamcommunity.com/market/listings/730/" + item["asset_description"][
             "market_hash_name"]
 
+        if "|" in item["asset_description"]["name"]:
+            name_spezifier = item["asset_description"]["name"].split("|")[1].split("(")[0]
+        else:
+            name_spezifier = None
+
         item_data.append(
             {
                 "classid": item["asset_description"]["classid"],
-                "appid": item["asset_description"]["appid"],
                 "market_hash_name": item["asset_description"]["market_hash_name"],
-                "name": item["asset_description"]["name"],
                 "item_nameid": item_nameid,
+                "name_spezifier": name_spezifier,
+                "min_float": None,
+                "max_float": None,
+                "droppool": None,
+                "appid": item["asset_description"]["appid"],
                 "background_color": item["asset_description"]["background_color"],
                 "name_color": item["asset_description"]["name_color"],
                 "icon_url": item["asset_description"]["icon_url"],
-                "type": item["asset_description"]["type"],
             }
         )
 

@@ -25,9 +25,10 @@ class ItemWithVendorOffers(ItemBase):
 
 class PaginatedShopItems(BaseModel):
     model_config = ConfigDict(from_attributes=True, extra="ignore")
-    limit: int
-    skip: int
-    itemsWithVendorOffers: list[ItemWithVendorOffers] = []
+    item_count: int | None
+    itemsWithVendorOffers: list[ItemWithVendorOffers] | None
+
+
 
 # result = shop_db_service.get_one_shop_item(db_session=get_session(), market_hash_name = "UMP-45 | Riot (Factory New)")
 # for each in result:

@@ -1,3 +1,20 @@
+# Import tables
+import db_service.users.schema  # noqa
+import db_service.items.schema  # noqa
+import db_service.vendors.schema  # noqa
+import db_service.vendor_offers.schema  # noqa
+import db_service.accounts.schema  # noqa
+import db_service.assets.schema  # noqa
+import db_service.asset_stacks.schema  # noqa
+import db_service.skinport_pricehistory.schema # noqa
+import db_service.container_contents.schema # noqa
+import db_service.statistics.schema # noqa
+import db_service.price_histories.schema # noqa
+
+
+
+
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -7,6 +24,10 @@ from alembic import context
 
 from db_service import base
 from settings import settings
+
+
+
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

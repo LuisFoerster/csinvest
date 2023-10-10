@@ -9,6 +9,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def get_session() -> Session:
     db = SessionLocal()
     try:
-        return db
+        yield db
     finally:
         db.close()

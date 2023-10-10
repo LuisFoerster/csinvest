@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 # from db_service. import Depot
-import db_service.accounts.service as accounts_service
-import db_service.asset_stacks.service as asset_stacks_service
+import db_service as accounts_service
+import db_service as asset_stacks_service
 from api_service.steam.communityapi.endpoints import SteamCommunityEndpoints
 from db_service.session import get_session
 from web_service.asset_stacks.models import Depot

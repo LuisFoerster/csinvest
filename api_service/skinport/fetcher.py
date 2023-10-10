@@ -2,7 +2,7 @@ import db_service as item_service
 import db_service as skinport_service
 from api_service.skinport.endpoints import get_all_tradehistories_from_skinport
 # import vendor_offers.service as vendor_offers_service
-from db_service.session import get_session, Session
+from db_service import get_session, Session
 
 session = get_session()
 
