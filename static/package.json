@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev_to_all": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
-    "generate-client": "openapi --input  http://127.0.0.1:8000/openapi.json --output ./src/client --client axios"
+    "generate-client": "openapi --input  http://192.168.179.3:8000/openapi.json --output ./src/client --client axios"
   },
   "dependencies": {
+    "@vueuse/core": "^10.4.1",
     "axios": "^1.4.0",
+    "pinia": "^2.1.6",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },
