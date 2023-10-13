@@ -1,5 +1,4 @@
 from datetime import datetime
-
 import sqlalchemy as sa
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -25,12 +24,16 @@ def get_shop_items(*, db_session: Session,
                    max_release_year: int | None,
                    just_return_match_count: bool,
                    ):
+
     agr_func = func.count(Item.classid).label("items_found")
 
     def apply_filters(stmt):
 
         if q:
-            stmt = stmt.where(Item.market_hash_name.like(f"%{q}%"))
+            threshold = 0.2
+            stmt = db_session.query(Item, func.similarity(Item.market_hash_name, q).label('similarity_score')).filter(
+                func.similarity(Item.market_hash_name, q) >= threshold)
+            stmt = stmt.order_by('similarity_score')
         if type:
             stmt = stmt.where(Item.type.in_(type))
         if weapon_type:
