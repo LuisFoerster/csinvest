@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Float, Boolean, text, Integer, DateTime, func, ForeignKey
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from db_service.base import Base
@@ -12,7 +13,7 @@ class AssetStack(Base):
     buyin = Column(Float)
     virtual = Column(Boolean)
     virtual_size = Column(Integer)
-    updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+    updated_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'), onupdate=text('CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     item = relationship("Item", back_populates="asset_stacks")

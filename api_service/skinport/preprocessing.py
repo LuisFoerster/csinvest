@@ -1,5 +1,6 @@
-import db_service as item_service
 from sqlalchemy.orm import Session
+
+import db_service as item_service
 
 
 def preprocess_offer(db_session: Session, data: dict):

@@ -1,9 +1,8 @@
 import json
 from datetime import datetime
 
-
-from api_service.steam.communityapi.utils import cent_to_euro
 from api_service.steam.communityapi.endpoints import steam_community_endpoints_service
+from api_service.steam.communityapi.utils import cent_to_euro
 
 
 def get_inventory_dummy():
@@ -81,10 +80,7 @@ def get_some_items_and_their_offers(*, start: int, count: int):
     item_data = []
     offer_data = []
 
-
-
-    raw_data = steam_community_endpoints_service.fetch_some_items(start = start, count = count)
-
+    raw_data = steam_community_endpoints_service.fetch_some_items(start=start, count=count)
 
     for item in raw_data["results"]:
         item_nameid = 1  # get_item_nameid(market_hash_name) ISSUE: TO MANY REQUESTS (Only 20 Items possible)

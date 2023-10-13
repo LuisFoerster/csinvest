@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Float, text, Integer, DateTime, func, ForeignKey, UniqueConstraint
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from db_service.base import Base
@@ -12,7 +13,7 @@ class HistoryListing(Base):
     time_stamp = Column(DateTime)
     volume = Column(Integer)
     price = Column(Float)
-    updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+    updated_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'), onupdate=text('CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     item = relationship("Item", back_populates="history_listings")

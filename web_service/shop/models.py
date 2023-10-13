@@ -28,8 +28,6 @@ class PaginatedShopItems(BaseModel):
     item_count: int | None
     itemsWithVendorOffers: list[ItemWithVendorOffers] | None
 
-
-
 # result = shop_db_service.get_one_shop_item(db_session=get_session(), market_hash_name = "UMP-45 | Riot (Factory New)")
 # for each in result:
 #     print(each.sell_listings)

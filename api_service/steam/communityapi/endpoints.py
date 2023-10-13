@@ -1,9 +1,8 @@
-import re
 from settings import settings
-import requests
-from bs4 import BeautifulSoup
 from uplink import Consumer, get, headers, Query, returns, retry
-from uplink.retry.when import raises, status
+from uplink.retry.when import status
+
+from settings import settings
 
 
 class SteamCommunityEndpoints(Consumer):
@@ -13,7 +12,7 @@ class SteamCommunityEndpoints(Consumer):
         "Accept": "application/json, text/javascript, */*; q=0.01",
     })
     @returns.json()
-    @retry(when= status(429), max_attempts=5, backoff=retry.backoff.fixed(100), )
+    @retry(when=status(429), max_attempts=5, backoff=retry.backoff.fixed(100), )
     @get("/market/search/render/")
     def fetch_some_items(self,
                          count: Query(type=int) = 1,
@@ -28,8 +27,6 @@ class SteamCommunityEndpoints(Consumer):
                          ):
         """Get some items from the Steam community market"""
 
-
-
     @headers({
         "Accept-Language": "en-US",
         "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -43,8 +40,6 @@ class SteamCommunityEndpoints(Consumer):
                         ):
         """Get some items from a steam users inventory"""
 
-
-
     @headers({
         "Accept-Language": "en-US",
         "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -53,19 +48,15 @@ class SteamCommunityEndpoints(Consumer):
     @returns.json()
     @get("/market/pricehistory/")
     def fetch_pricehistory(self,
-                              market_hash_name: Query(type=str),
-                              country: Query(type=str) = "US",
-                              currency: Query(type=int) = 1,
-                              appid: Query(type=int) = 730
-                              ):
+                           market_hash_name: Query(type=str),
+                           country: Query(type=str) = "US",
+                           currency: Query(type=int) = 1,
+                           appid: Query(type=int) = 730
+                           ):
         """Get the price history of an item"""
 
 
 steam_community_endpoints_service = SteamCommunityEndpoints(base_url="https://steamcommunity.com")
-
-
-
-
 
 # def fetch_some_items(start, count):
 #     url = "https://steamcommunity.com/market/search/render/"
@@ -206,4 +197,3 @@ steam_community_endpoints_service = SteamCommunityEndpoints(base_url="https://st
 #         # Handle JSON decoding errors
 #         print(f"Error occurred while parsing JSON response: {e}")
 #         return None
-

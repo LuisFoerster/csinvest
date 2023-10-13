@@ -1,8 +1,8 @@
+from datetime import datetime
+
 import sqlalchemy as sa
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from datetime import datetime
-from typing import List
 
 # Import db_services
 from db_service.items.schema import Item
@@ -23,10 +23,10 @@ def get_shop_items(*, db_session: Session,
                    max_price: float | None,
                    min_release_year: int | None,
                    max_release_year: int | None,
-                   just_return_match_count: bool ,
+                   just_return_match_count: bool,
                    ):
-
     agr_func = func.count(Item.classid).label("items_found")
+
     def apply_filters(stmt):
 
         if q:
@@ -53,9 +53,6 @@ def get_shop_items(*, db_session: Session,
             stmt = stmt.where(Item.release_year <= datetime(max_release_year, 1, 1))
         return stmt
 
-
-
-
     if just_return_match_count is False:
         stmt = (sa.select(Item)
                 .join(Item.vendor_offers)
@@ -74,5 +71,3 @@ def get_shop_items(*, db_session: Session,
         items = None
 
     return item_count, items
-
-

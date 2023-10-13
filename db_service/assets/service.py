@@ -1,8 +1,9 @@
-import sqlalchemy.dialects.mysql as mysql_sa
+from datetime import datetime
+
+import sqlalchemy as sa
+import sqlalchemy.dialects.postgresql as postgres_sa
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
-import sqlalchemy as sa
-from datetime import datetime
 
 from db_service.assets.schema import Asset
 
@@ -12,11 +13,16 @@ def create(*, db_session: Session, assets_in):
     db_session.commit()
 
 
-def create_or_update(*, db_session: Session, assets_in):
+def upsert(*, db_session: Session, assets_in):
     stmt = (
-        mysql_sa.insert(Asset)
+        postgres_sa.insert(Asset)
         .values(assets_in)
-        .on_duplicate_key_update(updated_at=func.current_timestamp())
+        .on_conflict_do_update(
+            index_elements=['assetid'],
+            set_={
+                'updated_at': func.current_timestamp()
+            }
+        )
     )
 
     db_session.execute(stmt)

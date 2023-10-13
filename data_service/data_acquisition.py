@@ -3,13 +3,10 @@ from sqlalchemy.orm import Session
 # import api services
 import api_service.steam.communityapi.data_preperation as steam_community_api_service
 import api_service.steam.steam_powered_api.data_preperation as steam_powered_api_service
-
-
 import db_service.asset_stacks.service as asset_stacks_db_service
 import db_service.assets.service as assets_db_service
-import db_service.items.service as items_db_service
 import db_service.container_contents.service as container_contents_db_serivce
-import db_service.price_histories.service as price_histories_db_service
+import db_service.items.service as items_db_service
 # import db services
 import db_service.vendor_offers.service as vendor_offers_db_service
 
@@ -20,18 +17,15 @@ def get_all_item_data_from_steam(*, db_session: Session):
 
     """
 
-    #TODO: get Release_date from pricehistory and insert into items.
-    #TODO: get items Info (rarity, Collection) from ClassInfoApi and insert into items.
-    #TODO: split information (quality)
-    #TODO: create relationships and insert in container_content table
-    #TODO: Errorhandling, if classid doesn't exists, retry...
+    # TODO: get Release_date from pricehistory and insert into items.
+    # TODO: get items Info (rarity, Collection) from ClassInfoApi and insert into items.
+    # TODO: split information (quality)
+    # TODO: create relationships and insert in container_content table
+    # TODO: Errorhandling, if classid doesn't exists, retry...
 
     start = 3500
 
-
-
     total_count = steam_community_api_service.get_total_count()
-
 
     while start < total_count:
         print(start)
@@ -50,22 +44,18 @@ def get_all_item_data_from_steam(*, db_session: Session):
             item_information = steam_powered_api_service.get_item_information(classid=item["classid"])
             item.update(item_information)
 
-
         # Insert into DB
 
-        items_db_service.create_or_skip(db_session=db_session, items_in=items)
-        vendor_offers_db_service.create_or_update(db_session=db_session, offers_in=offers)
+        items_db_service.upsert(db_session=db_session, items_in=items)
+        vendor_offers_db_service.upsert(db_session=db_session, offers_in=offers) # upsert (upgrade+insert) is the *new* create_or_update
         # price_histories_db_service.create_or_update(
         #     db_session=session, history_listing_in=history_listings
         # )
 
-
         start += 100
 
 
-
-
-def create_or_update_user_depot(*,db_session: Session, steamid: str):
+def upsert_user_depot(*, db_session: Session, steamid: str):
     asset_stackid_table = {}
 
     assets, descriptions = steam_community_api_service.get_inventory(steamid=steamid)
@@ -133,7 +123,7 @@ def create_or_update_user_depot(*,db_session: Session, steamid: str):
         db_session=db_session, steamid=steamid
     )
 
-    assets_db_service.create_or_update(db_session=db_session, assets_in=assets_to_insert)
+    assets_db_service.upsert(db_session=db_session, assets_in=assets_to_insert)
 
     if newest_update_timestamp is not None:
         assets_db_service.delete_stale(
@@ -158,11 +148,10 @@ def create_or_update_user_depot(*,db_session: Session, steamid: str):
 #     else:
 #         print("Item " + market_hash_name + " already up to date")
 
-def create_relations_between_container_and_content(*,db_session:Session):
-
+def create_relations_between_container_and_content(*, db_session: Session):
     relations = []
 
-    container = items_db_service.get_by_type(db_session= db_session, type = "Container")
+    container = items_db_service.get_by_type(db_session=db_session, type="Container")
     for container_element in container:
         content = steam_powered_api_service.get_container_content(classid=container_element.classid)
         for content_element in content:
@@ -172,6 +161,4 @@ def create_relations_between_container_and_content(*,db_session:Session):
                     "container_classid": container_element.classid,
                     "content_classid": each_classid
                 })
-    container_contents_db_serivce.create_or_skip(db_session=db_session,relation_in=relations)
-
-
+    container_contents_db_serivce.upsert(db_session=db_session, relation_in=relations)

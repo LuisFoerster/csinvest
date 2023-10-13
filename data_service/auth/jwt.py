@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 
 from jose import jwt
-from settings import settings
+
 from data_service.auth.models import Token
+from settings import settings
 
 
 def create_access_token(personaname: str) -> Token:

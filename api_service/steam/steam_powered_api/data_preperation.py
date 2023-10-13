@@ -1,5 +1,6 @@
 import api_service.steam.steam_powered_api.endpoints as steam_powered_api_endpoints
 
+
 def get_item_information(*, classid: str):
     """
         Get's the information about a item.
@@ -23,7 +24,7 @@ def get_item_information(*, classid: str):
 
     asset_class_info = steam_powered_api_endpoints.steam_powered_api.fetch_asset_class_info(classid0=classid)
 
-    item_information["name"]= asset_class_info["result"][classid]["name"]
+    item_information["name"] = asset_class_info["result"][classid]["name"]
 
     tags = asset_class_info["result"][classid]["tags"]
 
@@ -62,13 +63,14 @@ def get_item_information(*, classid: str):
 
     return item_information
 
-def get_container_content(*, classid:str):
+
+def get_container_content(*, classid: str):
     """
         Get's content of a container.
     """
 
     element_is_content = False
-    content : list[str] = []
+    content: list[str] = []
 
     asset_class_info = steam_powered_api_endpoints.steam_powered_api.fetch_asset_class_info(classid0=classid)
     descriptions = asset_class_info["result"][classid]["descriptions"]
@@ -85,5 +87,3 @@ def get_container_content(*, classid:str):
                 element_is_content = True
 
     return content
-
-

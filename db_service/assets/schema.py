@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, text, DateTime, func, ForeignKey
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from db_service.base import Base
@@ -12,7 +13,7 @@ class Asset(Base):
     asset_stackid = Column(ForeignKey("assetstacks.id"))
     instanceid = Column(String(64))
     contextid = Column(String(64))
-    updated_at = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+    updated_at = Column(TIMESTAMP, server_default=text('CURRENT_TIMESTAMP'), onupdate=text('CURRENT_TIMESTAMP'))
     created_at = Column(DateTime, server_default=func.CURRENT_TIMESTAMP())
 
     item = relationship("Item", back_populates="assets")

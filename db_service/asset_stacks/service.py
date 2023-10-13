@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-
+import sqlalchemy.dialects.postgresql as postgres_sa
 from db_service.asset_stacks.schema import AssetStack
 from db_service.assets.schema import Asset
 from db_service.items.schema import Item
@@ -19,17 +19,16 @@ def create(*, db_session: Session, asset_stack_in: dict):
     return result.scalar()
 
 
-def create_or_update(*, db_session: Session, asset_stack_in):
+def upsert(*, db_session: Session, asset_stack_in):
     stmt = (
-        sa.insert(AssetStack)
+        postgres_sa.insert(AssetStack)
         .values(asset_stack_in)
+        .on_conflict_do_nothing(
+            index_elements=['id']
+        )
     )
 
-    update_stmt = stmt.on_duplicate_key_update(
-
-    )
-
-    db_session.execute(update_stmt)
+    db_session.execute(stmt)
     db_session.commit()
 
 

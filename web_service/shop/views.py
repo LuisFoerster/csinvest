@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from typing import List
+
 import web_service.shop.service as shop_db_service
 from db_service.session import get_session
 from web_service.shop.models import PaginatedShopItems
@@ -28,34 +26,26 @@ async def get_item(skip: int = 0, limit: int = 100, q: str = None,
                    max_price: float = Query(None),
                    min_release_year: int = Query(None),
                    max_release_year: int = Query(None),
-                   just_return_match_count : bool = Query(False),
+                   just_return_match_count: bool = Query(False),
                    db_session: Session = Depends(get_session)):
-
-
     item_count, items = shop_db_service.get_shop_items(db_session=db_session,
-                                            skip=skip,
-                                            limit=limit,
-                                            q=q,
-                                            type=type,
-                                            exterior = exterior,
-                                            quality = quality,
-                                            category = category,
-                                            weapon_type = weapon_type,
-                                            collection = collection,
-                                            min_price=min_price,
-                                            max_price=max_price,
-                                            min_release_year=min_release_year,
-                                            max_release_year=max_release_year,
-                                            just_return_match_count = just_return_match_count
-                                            )
+                                                       skip=skip,
+                                                       limit=limit,
+                                                       q=q,
+                                                       type=type,
+                                                       exterior=exterior,
+                                                       quality=quality,
+                                                       category=category,
+                                                       weapon_type=weapon_type,
+                                                       collection=collection,
+                                                       min_price=min_price,
+                                                       max_price=max_price,
+                                                       min_release_year=min_release_year,
+                                                       max_release_year=max_release_year,
+                                                       just_return_match_count=just_return_match_count
+                                                       )
 
-
-    return PaginatedShopItems(item_count=item_count,itemsWithVendorOffers=items)
-
-
-
-
-
+    return PaginatedShopItems(item_count=item_count, itemsWithVendorOffers=items)
 
 # @router.get("/search/")
 # async def search(
